@@ -2,6 +2,7 @@ import User from "../model/usermodel.js";
 
 export const getcurrentUser = async (req, res) => {
     try{
+        console.log("Fetching current user with ID:", req.userId);
         let user = await User.findById(req.userId).select("-password");
 
         
@@ -10,8 +11,8 @@ export const getcurrentUser = async (req, res) => {
         }
 
 
-        res.status(200).json(user);
+        return res.status(200).json(user);
     }catch(error){
-        res.status(500).json({message: error.message});
+        res.status(500).json({"message": error.message});
     }
-}
+}   

@@ -4,6 +4,6 @@ import IsAuthMiddleware from '../middleware/isauthmiddleware.js';
 
 const userroutes = express.Router();
 
-userroutes.get('/getcurrentUser', IsAuthMiddleware, getcurrentUser);
+userroutes.post('/getcurrentUser', IsAuthMiddleware, getcurrentUser);
 
 export default userroutes;

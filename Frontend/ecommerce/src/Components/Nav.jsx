@@ -1,7 +1,7 @@
 import React from "react";
 import { FaSearch, FaUserCircle, FaShoppingCart } from "react-icons/fa";
 
-const Navbar = ({ userdata, onLogout }) => {
+const Navbar = ({ userdata, logout }) => {
   const [showSearch, setShowSearch] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
@@ -32,36 +32,26 @@ const Navbar = ({ userdata, onLogout }) => {
 
         {/* Middle - Links */}
         <div className="flex gap-4">
-          <div className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900">
-            HOME
-          </div>
-          <div className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900">
-            COLLECTIONS
-          </div>
-          <div className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900">
-            ABOUT
-          </div>
-          <div className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900">
-            CONTACT
-          </div>
+          {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
+            <div
+              key={item}
+              className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900"
+            >
+              {item}
+            </div>
+          ))}
         </div>
 
         {/* Right - Icons */}
         <div className="flex items-center gap-4 text-gray-700 text-xl relative">
           {/* Search */}
-          <div
-            className="cursor-pointer hover:text-gray-900"
-            onClick={toggleSearch}
-          >
+          <div className="cursor-pointer hover:text-gray-900" onClick={toggleSearch}>
             <FaSearch />
           </div>
 
           {/* Profile */}
           {!userdata ? (
-            <div
-              className="cursor-pointer hover:text-gray-900"
-              onClick={toggleDropdown}
-            >
+            <div className="cursor-pointer hover:text-gray-900" onClick={toggleDropdown}>
               <FaUserCircle />
             </div>
           ) : (
@@ -113,7 +103,7 @@ const Navbar = ({ userdata, onLogout }) => {
         <div className="absolute right-12 top-16 bg-white border border-gray-300 rounded-xl shadow-md p-3 w-40">
           <div
             className="text-gray-800 text-sm py-2 px-3 hover:bg-gray-100 rounded-lg cursor-pointer"
-            onClick={onLogout}
+            onClick={logout}
           >
             Logout
           </div>

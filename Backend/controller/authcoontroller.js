@@ -2,6 +2,7 @@ import validator from 'validator';
 import User from '../model/usermodel.js';
 import bcrypt from 'bcryptjs';
 import genToken from '../config/token.js';
+import { getcurrentUser } from './usercontroller.js';
 
 export const registration = async (req, res) => {
   try {
@@ -101,6 +102,7 @@ export const login = async (req, res) => {
     });
 
     console.log("User logged in successfully:", user);
+    getcurrentUser(req, res);
     // ✅ FIXED: Send only one response
     return res.status(201).json({
       _id: user._id,
