@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
 import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { AuthDataContext } from "../context/authcontext";
+import { AuthDataContext } from "../context/Authcontext.jsx"
+import { userdataContext } from "../context/Usercontext.jsx";
+
 import axios from "axios";
 
 
@@ -13,7 +15,7 @@ const Login = () => {
         const [email, setemail] = React.useState(false);
         const [password, setpassword] = React.useState(false);
         let serverURL = React.useContext(AuthDataContext).serverURL;
-
+        let {getcurrentUser} = useContext(userdataContext);
     const handlelogin = async (e) => {
         e.preventDefault();
         try{
@@ -23,6 +25,7 @@ const Login = () => {
             }, {withCredentials:true});
             console.log("Login successful:", result.data);
             alert("Login successful!");
+            getcurrentUser;
             navigate("/");
         }catch(err){
             console.error("Login failed:", err.response ? err.response.data : err.message);

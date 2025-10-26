@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthDataContext } from "../context/Authcontext.jsx";
 import axios from "axios";
+import { userdataContext } from "../context/Usercontext.jsx";
 
 
 const Registration = () => {
@@ -16,6 +17,7 @@ const Registration = () => {
     const [name, setname] = React.useState("");
     const [email, setemail] = React.useState("");
     const [password, setpassword] = React.useState("");
+    const { getcurrentUser } = React.useContext(userdataContext);
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -27,7 +29,8 @@ const Registration = () => {
             }, {withCredentials:true});
             console.log("Registration successful:", result.data);
             alert("Registration successful! Please login.");
-            navigate("/login");
+            getcurrentUser();
+            navigate("/");
         }catch(err){
             console.error("Registration failed:", err.response ? err.response.data : err.message);
             alert(`Registration failed: ${err.response ? err.response.data.message : err.message}`);

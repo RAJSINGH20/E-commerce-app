@@ -50,6 +50,7 @@ export const registration = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    console.log("User registered successfully:", newuser);
     // ✅ FIXED: Send only one response
     return res.status(201).json({
       _id: newuser._id,
@@ -99,6 +100,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    console.log("User logged in successfully:", user);
     // ✅ FIXED: Send only one response
     return res.status(201).json({
       _id: user._id,
@@ -120,6 +122,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         res.clearCookie("token");
+        console.log("User logged out successfully");
         return res.status(200).json({ message: "User logged out successfully" });
     } catch (error) {
         console.error("User logout failed:", error.message);
