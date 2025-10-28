@@ -1,10 +1,14 @@
 import React from "react";
+import axios from "axios";
 import { FaSearch, FaUserCircle, FaShoppingCart } from "react-icons/fa";
+import { AuthDataContext } from "../context/Authcontext"; // adjust path
 
-const Navbar = ({ userdata, logout }) => {
+const Navbar = ({ userdata, onLogout }) => {
   const [showSearch, setShowSearch] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
+
+  const { serverURL } = React.useContext(AuthDataContext);
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -14,6 +18,23 @@ const Navbar = ({ userdata, logout }) => {
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
     setShowSearch(false);
+  };
+
+  const logout = async () => {
+    try {
+      const res = await axios.post(`${serverURL}/api/auth/logout`, {}, { withCredentials: true });
+
+      if (res.status === 200) {
+        alert("Logged out successfully!");
+        if (onLogout) onLogout(); // optional callback to update state in parent
+        window.location.href = "/login"; // redirect
+      } else {
+        alert("Logout failed!");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("Error while logging out. Try again!");
+    }
   };
 
   return (

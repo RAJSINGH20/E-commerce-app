@@ -5,18 +5,18 @@ import { AuthDataContext } from './Authcontext';
 export const userdataContext = createContext();
 
 function Usercontext({ children }) {
-  let [userdata, Setuserdata] = useState(null);
+  let [user, Setuser] = useState(null);
   const { serverURL } = useContext(AuthDataContext);
 
   const getcurrentuser = async () => {
     try {
       console.log("Attempting to fetch current user data...");
-      let result = await axios.post(`${serverURL}/api/user/getcurrentUser`, {}, { withCredentials: true });
-      Setuserdata(result.data);
+      let result = await axios.post(`${serverURL}/api/user/getcurrentUser`, { withCredentials: true });
+      Setuser(result.data);
       console.log("Current user data fetched:", result.data);
     } catch (error) {
       console.log(`Error fetching current user: ${error.message}`);
-      Setuserdata(null);
+      Setuser(null);
     }
   };
 
@@ -24,7 +24,7 @@ function Usercontext({ children }) {
     getcurrentuser();
   }, []);
 
-  let value = { userdata, Setuserdata , getcurrentuser};
+  let value = { user, Setuser , getcurrentuser};
 
   return (
     <div>

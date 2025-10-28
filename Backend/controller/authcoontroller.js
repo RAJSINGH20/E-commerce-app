@@ -68,31 +68,31 @@ export const registration = async (req, res) => {
 
 
 export const login = async (req, res) => {
-    try {
+  try {
     let { email, password } = req.body;
     console.log("Login request body:", req.body);
-    
+
     // Validate required fields
     if (!email || !password) {
-        return res.status(402).json({ message: "All fields are required" });
+      return res.status(402).json({ message: "All fields are required" });
     }
-    
+
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-        return res.status(404).json({ message: "Invalid email or password" });
+      return res.status(404).json({ message: "Invalid email or password" });
     }
-    
+
     // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        return res.status(406).json({ message: "Invalid email or password" });
+      return res.status(406).json({ message: "Invalid email or password" });
     }
-    
-    
-    
+
+
+
     const token = await genToken(user._id);
-    
+
     // ✅ FIXED: Correct option name is `maxAge` (lowercase)
     res.cookie("token", token, {
       httpOnly: true,
@@ -101,9 +101,9 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    console.log("User logged in successfully:", user);
     getcurrentUser(req, res);
     // ✅ FIXED: Send only one response
+    console.log("User logged in successfully:", user);
     return res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -122,15 +122,15 @@ export const login = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-    try {
-        res.clearCookie("token");
-        console.log("User logged out successfully");
-        return res.status(200).json({ message: "User logged out successfully" });
-    } catch (error) {
-        console.error("User logout failed:", error.message);
-        return res.status(500).json({
-            message: "Internal server error",
-            error: error.message,
-        });
-    }
+  try {
+    res.clearCookie("token");
+    console.log("User logged out successfully");
+    return res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    console.error("User logout failed:", error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
 };
