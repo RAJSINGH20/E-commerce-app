@@ -5,6 +5,6 @@ import genToken from '../config/token.js';
 
 const userroutes = express.Router();
 
-userroutes.post('/getcurrentUser', genToken, getcurrentUser);
+userroutes.post('/getcurrentUser', getcurrentUser);
 
 export default userroutes;
