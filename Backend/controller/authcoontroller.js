@@ -134,3 +134,18 @@ export const logout = async (req, res) => {
     });
   }
 };
+
+
+
+//admin login
+export const adminlogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if(!email || !password){
+      return res.status(400).json({ message: "All fields are required" });
+    }
+    
+
+  }
+}
