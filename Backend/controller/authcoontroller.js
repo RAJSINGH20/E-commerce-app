@@ -1,7 +1,7 @@
 import validator from 'validator';
 import User from '../model/usermodel.js';
 import bcrypt from 'bcryptjs';
-import genToken from '../config/token.js';
+import genToken, { genToken1 } from '../config/token.js';
 import { getcurrentUser } from './usercontroller.js';
 
 export const registration = async (req, res) => {
@@ -134,3 +134,42 @@ export const logout = async (req, res) => {
     });
   }
 };
+
+
+
+//admin login
+export const adminlogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if(!email || !password){
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if(email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD){
+      return res.status(401).json({ message: "Invalid admin credentials" });
+    }
+    const token = await genToken1(email);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    console.log("Admin logged in successfully");
+    return res.status(200).json({
+      email,
+      token,
+      message: "Admin login successful",
+    });
+    
+
+  }catch (error) {
+    console.error("Admin login failed:", error.message);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
