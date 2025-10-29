@@ -101,7 +101,7 @@ export const login = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    getcurrentUser(req, res);
+    // getcurrentUser(req, res);
     // ✅ FIXED: Send only one response
     console.log("User logged in successfully:", user);
     return res.status(201).json({

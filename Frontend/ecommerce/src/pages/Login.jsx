@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { AuthDataContext } from "../context/Authcontext.jsx";
-import { userdataContext } from "../context/Usercontext.jsx";
 
 const Login = () => {
   // States
