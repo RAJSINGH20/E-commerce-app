@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import React from "react";
 import { FaEye, FaEyeSlash } from "react-icons";
 import { useNavigate } from "react-router-dom";
@@ -84,11 +84,10 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${
-              loading
+            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${loading
                 ? "opacity-60 cursor-not-allowed"
                 : "hover:bg-indigo-700 hover:shadow-lg"
-            }`}
+              }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
@@ -106,14 +105,4 @@ const Login = () => {
 };
 
 export default Login;
-=======
-import React from 'react'
 
-const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
-
-export default Login
->>>>>>> fdeddd59e69d173203b5f8895a1c23359ea30fb5
