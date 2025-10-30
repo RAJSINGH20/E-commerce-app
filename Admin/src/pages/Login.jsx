@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { FaEye, FaEyeSlash } from "react-icons";
 import { useNavigate } from "react-router-dom";
@@ -105,3 +106,14 @@ const Login = () => {
 };
 
 export default Login;
+=======
+import React from 'react'
+
+const Login = () => {
+  return (
+    <div>Login</div>
+  )
+}
+
+export default Login
+>>>>>>> fdeddd59e69d173203b5f8895a1c23359ea30fb5
