@@ -1,10 +1,8 @@
 import express from "express";
-import {login ,registration , logout, adminlogin}  from "../controller/authcoontroller.js";
+import { AddProduct } from "../controller/productcontroller";
+import upload from "../middleware/multer";
 
-const authroutes = express.Router();
-authroutes.post("/registration", registration);
-authroutes.post("/login", login);
-authroutes.post("/logout", logout);
-authroutes.post("/adminlogin", adminlogin);
+const productRoutes = express.Router();
+productRoutes.post("/addproduct", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }, { name: 'image3', maxCount: 1 }]), AddProduct);
 
-export default authroutes;
+export default productRoutes;
