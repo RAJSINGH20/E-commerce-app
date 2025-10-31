@@ -5,11 +5,11 @@ import Orders from './pages/Orders'
 import Login from './pages/Login.jsx'
 import List from './pages/List'
 import { Routes, Route } from 'react-router-dom'
-import { adminContext } from './Context/Admincontext.jsx'
 
 const App = () => {
     return (
         <div>
+        
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/add" element={<Add />} />
