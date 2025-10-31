@@ -2,13 +2,10 @@ import React from 'react'
 import Home from './pages/Home'
 import Add from './pages/Add'
 import Orders from './pages/Orders'
-<<<<<<< HEAD
 import Login from './pages/Login.jsx'
-=======
-import Login from './pages/Login'
->>>>>>> fdeddd59e69d173203b5f8895a1c23359ea30fb5
 import List from './pages/List'
 import { Routes, Route } from 'react-router-dom'
+import { adminContext } from './Context/Admincontext.jsx'
 
 const App = () => {
     return (

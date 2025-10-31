@@ -140,12 +140,12 @@ export const logout = async (req, res) => {
 //admin login
 export const adminlogin = async (req, res) => {
   try {
+    console.log("Admin login request body:", req.body);
     const { email, password } = req.body;
 
     if(!email || !password){
       return res.status(400).json({ message: "All fields are required" });
     }
-<<<<<<< HEAD
 
     if(email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD){
       return res.status(401).json({ message: "Invalid admin credentials" });
@@ -172,9 +172,5 @@ export const adminlogin = async (req, res) => {
       message: "Internal server error",
       error: error.message,
     });
-=======
-    
-
->>>>>>> fdeddd59e69d173203b5f8895a1c23359ea30fb5
   }
 }

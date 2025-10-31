@@ -1,26 +1,46 @@
-
-import React from "react";
-import { FaEye, FaEyeSlash } from "react-icons";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
+import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
+import { AuthDataContext } from "../Context/AuthCountext";
 
 const Login = () => {
+  // ✅ States
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const serverURL = "http://localhost:8000";
 
-  // States
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-
-  const handleSubmit = (e) => {
+  // ✅ Admin Login Handler
+  const adminlogin = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      alert("Please enter both email and password!");
+      return;
+    }
+
     setLoading(true);
-    // Add login logic here (e.g. axios POST)
-    setTimeout(() => {
+    try {
+      const result = await axios.post(
+        `${serverURL}/api/auth/adminlogin`,
+        { email, password },
+        { withCredentials: true }
+      );
+
+      console.log("✅ Login successful:", result.data);
+      alert("Login successful!");
+      navigate("/");
+    } catch (error) {
+      console.error("❌ Login failed:",error.message);
+      alert("Login failed! Please check your credentials.");
+    } finally {
       setLoading(false);
-      console.log("Login successful");
-    }, 1500);
+    }
   };
 
   return (
@@ -35,13 +55,15 @@ const Login = () => {
             onClick={() => navigate("/")}
           />
           <h1 className="text-3xl font-bold text-indigo-700 tracking-wide">
-            Admin Login Account
+            Login Account
           </h1>
-          <p className="text-gray-500 mt-1 text-sm"></p>
+          <p className="text-gray-500 mt-1 text-sm">
+            Join VCart and start your shopping journey today
+          </p>
         </div>
 
         {/* Login Form */}
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-4" onSubmit={adminlogin}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
@@ -81,13 +103,15 @@ const Login = () => {
             )}
           </div>
 
+          {/* ✅ Login Button */}
           <button
             type="submit"
             disabled={loading}
-            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${loading
+            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${
+              loading
                 ? "opacity-60 cursor-not-allowed"
                 : "hover:bg-indigo-700 hover:shadow-lg"
-              }`}
+            }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
@@ -99,10 +123,20 @@ const Login = () => {
           <span className="mx-2 text-gray-500 text-sm">or</span>
           <hr className="flex-grow border-gray-300" />
         </div>
+
+        {/* Footer */}
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Add a new account?{" "}
+          <button
+            onClick={() => navigate("/Registration")}
+            className="text-indigo-600 hover:underline font-medium"
+          >
+            Register here
+          </button>
+        </p>
       </div>
     </div>
   );
 };
 
 export default Login;
-
