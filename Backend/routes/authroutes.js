@@ -1,8 +1,18 @@
 import express from "express";
-import { AddProduct } from "../controller/productcontroller";
-import upload from "../middleware/multer";
+import upload from "../middleware/multer.js"; // ✅ add .js extension (ESM requires it)
+import {
+  adminlogin,
+  login,
+  logout,
+  registration,
+} from "../controller/authcoontroller.js"; // ✅ fixed spelling
 
-const productRoutes = express.Router();
-productRoutes.post("/addproduct", upload.fields([{ name: 'image', maxCount: 1 }, { name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }, { name: 'image3', maxCount: 1 }]), AddProduct);
+const authRoutes = express.Router();
 
-export default productRoutes;
+// ✅ Routes
+authRoutes.post("/register", upload.single("profileImage"), registration); // example if you upload a file
+authRoutes.post("/login", login);
+authRoutes.post("/logout", logout);
+authRoutes.post("/adminlogin", adminlogin);
+
+export default authRoutes;

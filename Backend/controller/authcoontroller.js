@@ -2,7 +2,6 @@ import validator from 'validator';
 import User from '../model/usermodel.js';
 import bcrypt from 'bcryptjs';
 import genToken, { genToken1 } from '../config/token.js';
-import { getcurrentUser } from './usercontroller.js';
 
 export const registration = async (req, res) => {
   try {
