@@ -18,7 +18,7 @@ const Add = () => {
   const [bestseller, setBestseller] = React.useState(false);
   const [selectedSizes, setSelectedSizes] = React.useState([]);
   const [stock, setStock] = React.useState("");
-  const { serverURL } = React.useContext(AuthDataContext);
+  const { serverURL } = "http://localhost:8000";
 
   // ✅ Handle size selection toggle
   const handleSizeToggle = (size) => {
@@ -47,19 +47,19 @@ const Add = () => {
       formdata.append("size", JSON.stringify(selectedSizes));
       formdata.append("stock", stock);
 
-      // console.log("Submitting product with data:", {
-      //   name: formdata.get("name"),
-      //   description: formdata.get("description"),
-      //   category: formdata.get("category"),
-      //   price: formdata.get("price"),
-      //   subcategory: formdata.get("subcategory"),
-      //   bestseller: formdata.get("bestseller"),
-      //   size: formdata.get("size"),
-      //   stock: formdata.get("stock"),
-      // });
+      console.log("Submitting product with data:", {
+        name: formdata.get("name"),
+        description: formdata.get("description"),
+        category: formdata.get("category"),
+        price: formdata.get("price"),
+        subcategory: formdata.get("subcategory"),
+        bestseller: formdata.get("bestseller"),
+        size: formdata.get("size"),
+        stock: formdata.get("stock"),
+      });
 
       const result = await axios.post(
-        `${serverURL}/api/product/addproduct`,
+        `${serverURL}/api/product/AddProduct`,
         formdata,
         { withCredentials: true }
       );
