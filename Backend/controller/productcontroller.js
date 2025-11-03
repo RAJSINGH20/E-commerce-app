@@ -4,7 +4,9 @@ import { json } from "express";
 
 export const AddProduct = async(req,res) => {
     try {
-        const {name,description,price,category,subcategory,size,date,bestsellers} = req.body;
+        console.log("AddProduct request body:", req.body);
+        const {name,description,price,category,subcategory,size,bestsellers} = req.body;
+        console.log(req.body);
 
         const image=  await uploadToCloudinary(req.files.image[0].path, 'products')
         const image1=  await uploadToCloudinary(req.files.image1[0].path, 'products')

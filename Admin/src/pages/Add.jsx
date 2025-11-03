@@ -1,39 +1,36 @@
-import React from "react";
-import Nav from "../components/Nav.jsx";
-import Sidebar from "../components/Sidebar.jsx";
-import upload from "../assets/upload.jpg";
-import axios from "axios";
-import { AuthDataContext } from "../Context/AuthCountext.jsx";
+import React from 'react';
+import Nav from '../components/Nav.jsx';
+import Sidebar from '../components/Sidebar.jsx';
+import upload from '../assets/upload.jpg';
+import axios from 'axios';
+import { AuthDataContext } from '../Context/AuthCountext.jsx'; // ✅ make sure path is correct
 
 const Add = () => {
-  const [Image, setImage] = React.useState(null);
-  const [Image1, setImage1] = React.useState(null);
-  const [Image2, setImage2] = React.useState(null);
-  const [Image3, setImage3] = React.useState(null);
+  // ✅ All useStates at top (Hooks cannot be inside JSX)
+  const [Image, setImage] = React.useState(false);
+  const [Image1, setImage1] = React.useState(false);
+  const [Image2, setImage2] = React.useState(false);
+  const [Image3, setImage3] = React.useState(false);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [subcategory, setSubcategory] = React.useState("");
   const [bestseller, setBestseller] = React.useState(false);
-  const [selectedSizes, setSelectedSizes] = React.useState([]);
+  const [size, setSize] = React.useState(""); // ✅ single selected size
   const [stock, setStock] = React.useState("");
-  const { serverURL } = "http://localhost:8000";
+  const { serverURL } = React.useContext(AuthDataContext);
 
-  // ✅ Handle size selection toggle
-  const handleSizeToggle = (size) => {
-    setSelectedSizes((prev) =>
-      prev.includes(size)
-        ? prev.filter((s) => s !== size)
-        : [...prev, size]
+   const toggleSize = (sz) => {
+    setSize((prev) =>
+      prev.includes(sz) ? prev.filter((s) => s !== sz) : [...prev, sz]
     );
   };
-
-  // ✅ Handle Form Submit
+  // ✅ handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formdata = new FormData();
+      let formdata = new FormData();
       formdata.append("Image", Image);
       formdata.append("Image1", Image1);
       formdata.append("Image2", Image2);
@@ -44,42 +41,29 @@ const Add = () => {
       formdata.append("price", price);
       formdata.append("subcategory", subcategory);
       formdata.append("bestseller", bestseller);
-      formdata.append("size", JSON.stringify(selectedSizes));
+      formdata.append("size", size);
       formdata.append("stock", stock);
 
-      console.log("Submitting product with data:", {
-        name: formdata.get("name"),
-        description: formdata.get("description"),
-        category: formdata.get("category"),
-        price: formdata.get("price"),
-        subcategory: formdata.get("subcategory"),
-        bestseller: formdata.get("bestseller"),
-        size: formdata.get("size"),
-        stock: formdata.get("stock"),
+      let result = await axios.post(`${serverURL}/api/product/addproduct`, formdata, {
+        withCredentials: true,
       });
-
-      const result = await axios.post(
-        `${serverURL}/api/product/AddProduct`,
-        formdata,
-        { withCredentials: true }
-      );
 
       if (result.status === 201 || result.status === 200) {
         console.log("✅ Product added successfully:", result.data);
 
-        // Reset form
+        // reset fields
         setName("");
         setDescription("");
         setCategory("");
         setPrice("");
         setSubcategory("");
         setBestseller(false);
-        setSelectedSizes([]);
+        setSize("");
         setStock("");
-        setImage(null);
-        setImage1(null);
-        setImage2(null);
-        setImage3(null);
+        setImage(false);
+        setImage1(false);
+        setImage2(false);
+        setImage3(false);
       } else {
         console.log("❌ Failed to add product:", result);
       }
@@ -147,9 +131,7 @@ const Add = () => {
 
             {/* Category */}
             <div>
-              <label className="font-medium text-gray-700">
-                Product Category
-              </label>
+              <label className="font-medium text-gray-700">Product Category</label>
               <select
                 required
                 value={category}
@@ -157,7 +139,7 @@ const Add = () => {
                 className="border border-gray-300 rounded-md p-2 sm:p-3 mt-1 w-full focus:ring-2 focus:ring-lime-500 outline-none"
               >
                 <option value="" hidden>
-                  Select
+                  select
                 </option>
                 <option value="MEN">MEN</option>
                 <option value="WOMEN">WOMEN</option>
@@ -167,9 +149,7 @@ const Add = () => {
 
             {/* Subcategory */}
             <div>
-              <label className="font-medium text-gray-700">
-                Product Subcategory
-              </label>
+              <label className="font-medium text-gray-700">Product SUB-Category</label>
               <select
                 required
                 value={subcategory}
@@ -177,7 +157,7 @@ const Add = () => {
                 className="border border-gray-300 rounded-md p-2 sm:p-3 mt-1 w-full focus:ring-2 focus:ring-lime-500 outline-none"
               >
                 <option value="" hidden>
-                  Select
+                  select
                 </option>
                 <option value="TOPWEAR">TOPWEAR</option>
                 <option value="BOTTOMWEAR">BOTTOMWEAR</option>
@@ -187,24 +167,24 @@ const Add = () => {
 
             {/* Size Selector */}
             <div>
-              <p className="font-medium text-gray-700 mb-2">Select Sizes</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {["S", "M", "L", "XL", "XXL"].map((size) => (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => handleSizeToggle(size)}
-                    className={`border rounded-md py-2 text-sm sm:text-base transition-all ${
-                      selectedSizes.includes(size)
-                        ? "bg-lime-600 text-white border-lime-700"
-                        : "bg-white text-gray-700 hover:bg-lime-100"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
+      <p className="font-medium text-gray-700 mb-2">Select Sizes</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+        {["S", "M", "L", "XL", "XXL"].map((sz) => (
+          <button
+            key={sz}
+            type="button"
+            onClick={() => toggleSize(sz)} // ✅ use toggle instead of setSize
+            className={`border rounded-md py-2 text-sm sm:text-base transition-all ${
+              size.includes(sz)
+                ? "bg-lime-600 text-white border-lime-700"
+                : "bg-white text-gray-700 hover:bg-lime-100"
+            }`}
+          >
+            {sz}
+          </button>
+        ))}
+      </div>
+    </div>
 
             {/* Bestseller */}
             <div className="flex items-center">
@@ -226,36 +206,77 @@ const Add = () => {
                 Upload Images
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 place-items-center">
-                {[Image, Image1, Image2, Image3].map((img, i) => (
-                  <label
-                    key={i}
-                    htmlFor={`image${i}`}
-                    className="cursor-pointer flex flex-col items-center"
-                  >
-                    <img
-                      src={!img ? upload : URL.createObjectURL(img)}
-                      alt="upload"
-                      className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
-                    />
-                    <input
-                      type="file"
-                      id={`image${i}`}
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        if (i === 0) setImage(file);
-                        if (i === 1) setImage1(file);
-                        if (i === 2) setImage2(file);
-                        if (i === 3) setImage3(file);
-                      }}
-                      required
-                    />
-                    <span className="text-blue-500 text-xs sm:text-sm">
-                      Choose File
-                    </span>
-                  </label>
-                ))}
+                {/* Image 1 */}
+                <label htmlFor="image" className="cursor-pointer flex flex-col items-center">
+                  <img
+                    src={!Image ? upload : URL.createObjectURL(Image)}
+                    alt="upload"
+                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
+                  />
+                  <input
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    accept="image/*"
+                    required
+                    onChange={(event) => setImage(event.target.files[0])}
+                  />
+                  <span className="text-blue-500 text-xs sm:text-sm">Choose File</span>
+                </label>
+
+                {/* Image 2 */}
+                <label htmlFor="image1" className="cursor-pointer flex flex-col items-center">
+                  <img
+                    src={!Image1 ? upload : URL.createObjectURL(Image1)}
+                    alt="upload"
+                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
+                  />
+                  <input
+                    type="file"
+                    id="image1"
+                    className="hidden"
+                    accept="image/*"
+                    required
+                    onChange={(event) => setImage1(event.target.files[0])}
+                  />
+                  <span className="text-blue-500 text-xs sm:text-sm">Choose File</span>
+                </label>
+
+                {/* Image 3 */}
+                <label htmlFor="image2" className="cursor-pointer flex flex-col items-center">
+                  <img
+                    src={!Image2 ? upload : URL.createObjectURL(Image2)}
+                    alt="upload"
+                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
+                  />
+                  <input
+                    type="file"
+                    id="image2"
+                    className="hidden"
+                    accept="image/*"
+                    required
+                    onChange={(event) => setImage2(event.target.files[0])}
+                  />
+                  <span className="text-blue-500 text-xs sm:text-sm">Choose File</span>
+                </label>
+
+                {/* Image 4 */}
+                <label htmlFor="image3" className="cursor-pointer flex flex-col items-center">
+                  <img
+                    src={!Image3 ? upload : URL.createObjectURL(Image3)}
+                    alt="upload"
+                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
+                  />
+                  <input
+                    type="file"
+                    id="image3"
+                    className="hidden"
+                    accept="image/*"
+                    required
+                    onChange={(event) => setImage3(event.target.files[0])}
+                  />
+                  <span className="text-blue-500 text-xs sm:text-sm">Choose File</span>
+                </label>
               </div>
             </div>
 

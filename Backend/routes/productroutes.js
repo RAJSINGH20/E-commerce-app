@@ -4,7 +4,8 @@ import { AddProduct } from "../controller/productcontroller.js";
 
 const productroutes = express.Router();
 
-productroutes.post("/addproduct", upload.fields([
+productroutes.post("/AddProduct", upload.fields(575[
+    
     { name: "Image", maxCount: 1 },
     { name: "Image1", maxCount: 1 },
     { name: "Image2", maxCount: 1 },
