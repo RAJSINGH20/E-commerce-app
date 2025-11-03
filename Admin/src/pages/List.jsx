@@ -1,8 +1,13 @@
 import React from 'react'
+import Nav from '../components/Nav'
+import Sidebar from '../components/Sidebar'
 
 const List = () => {
   return (
-    <div>List</div>
+    <div>
+      <Nav />
+      <Sidebar />
+    </div>
   )
 }
 

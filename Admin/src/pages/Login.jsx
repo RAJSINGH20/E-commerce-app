@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, {  useContext, useState } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -13,7 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const serverURL = "http://localhost:8000";
+  const serverURL = useContext(AuthDataContext).serverURL;
 
   // ✅ Admin Login Handler
   const adminlogin = async (e) => {

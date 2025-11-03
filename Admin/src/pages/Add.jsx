@@ -41,10 +41,10 @@ const Add = () => {
       formdata.append("price", price);
       formdata.append("subcategory", subcategory);
       formdata.append("bestseller", bestseller);
-      formdata.append("size", size);
+      formdata.append("size", JSON.stringify(["S", "L", "XXL"]));
       formdata.append("stock", stock);
 
-      let result = await axios.post(`${serverURL}/api/product/addproduct`, formdata, {
+      let result = await axios.post(`${serverURL}/api/product/AddProduct`, formdata, {
         withCredentials: true,
       });
 

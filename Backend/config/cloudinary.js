@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-const uploadToCloudinary = async (filePath, folder) => {
+export const uploadToCloudinary = async (filePath, folder) => {
     try {
        // Configuration
     cloudinary.config({ 

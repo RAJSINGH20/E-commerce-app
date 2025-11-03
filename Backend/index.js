@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/user", userroutes);
+console.log("Product routes loaded");
 app.use("/api/product", productroutes);
 
 app.listen(port, () => {
