@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaSearch,
   FaUserCircle,
@@ -16,6 +17,7 @@ const Navbar = ({ userdata, onLogout }) => {
   const [showMenu, setShowMenu] = React.useState(false);
 
   const { serverURL } = React.useContext(AuthDataContext);
+  const navigate = useNavigate();
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -44,7 +46,7 @@ const Navbar = ({ userdata, onLogout }) => {
       if (res.status === 200) {
         alert("Logged out successfully!");
         if (onLogout) onLogout();
-        window.location.href = "/login";
+        navigate("/login");
       } else {
         alert("Logout failed!");
       }
@@ -59,7 +61,7 @@ const Navbar = ({ userdata, onLogout }) => {
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-3 bg-[#e7f1ef] shadow-md">
         {/* Left - Logo */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
           <img
             src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
             alt="logo"
@@ -70,14 +72,30 @@ const Navbar = ({ userdata, onLogout }) => {
 
         {/* Middle - Links (Hidden on mobile) */}
         <div className="hidden md:flex gap-4">
-          {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
-            <div
-              key={item}
-              className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm cursor-pointer hover:bg-gray-900"
-            >
-              {item}
-            </div>
-          ))}
+          <Link
+            to="/"
+            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
+          >
+            HOME
+          </Link>
+          <Link
+            to="/Collection"
+            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
+          >
+            COLLECTIONS
+          </Link>
+          <Link
+            to="/About"
+            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
+          >
+            ABOUT
+          </Link>
+          <Link
+            to="/Contact"
+            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
+          >
+            CONTACT
+          </Link>
         </div>
 
         {/* Right - Icons */}
@@ -133,14 +151,34 @@ const Navbar = ({ userdata, onLogout }) => {
       {showMenu && (
         <div className="md:hidden bg-white shadow-md border-t border-gray-200 absolute top-14 left-0 w-full z-10 animate-slideDown">
           <div className="flex flex-col gap-3 p-4">
-            {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
-              <div
-                key={item}
-                className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm cursor-pointer hover:bg-gray-900"
-              >
-                {item}
-              </div>
-            ))}
+            <Link
+              to="/"
+              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
+              onClick={() => setShowMenu(false)}
+            >
+              HOME
+            </Link>
+            <Link
+              to="/Collection"
+              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
+              onClick={() => setShowMenu(false)}
+            >
+              COLLECTIONS
+            </Link>
+            <Link
+              to="/About"
+              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
+              onClick={() => setShowMenu(false)}
+            >
+              ABOUT
+            </Link>
+            <Link
+              to="/Contact"
+              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
+              onClick={() => setShowMenu(false)}
+            >
+              CONTACT
+            </Link>
           </div>
         </div>
       )}

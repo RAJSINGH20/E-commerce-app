@@ -10,8 +10,8 @@ const AdminAuth = (req, res, next) => {
         const verify = jwt.verify(token, process.env.JWT_SECRET);
 
         if (!verify) {
-            return res.status(403).json({ message: "Invalid token" });
             console.log("Login again invalid token");
+            return res.status(403).json({ message: "Invalid token" });
         }
         req.AdminEmail = process.env.ADMIN_EMAIL;
         next();

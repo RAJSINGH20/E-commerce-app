@@ -8,11 +8,11 @@ const List = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const server = "http://localhost:8000";
+  const serverURL = "http://localhost:8000";
 
   const fetchList = async () => {
     try {
-      const response = await axios.get(`${server}/api/product/GetProducts`, {
+      const response = await axios.get(`${serverURL}/api/product/GetProducts`, {
         withCredentials: true,
       });
       setList(response.data);
@@ -24,21 +24,22 @@ const List = () => {
     }
   };
 
-  const removelist = async (id) => {  
+  const removelist = async (id) => {
     try {
-      let result = await axios.delete(`${server}/api/product/removeproduct/${id}`, {
+      let result = await axios.get(`${serverURL}/api/product/removeproduct/${id}`, {
         withCredentials: true,
       });
+      console.log(result)
       if (result.data) {
         fetchList(); // Refresh the list after deletion
-      }else{
+      } else {
         console.log("Deletion failed");
       }
     } catch (err) {
       console.error("Error removing product:", err);
       setError("Failed to remove product.");
     }
-  };  
+  };
 
   useEffect(() => {
     fetchList();
@@ -46,7 +47,7 @@ const List = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* ✅ Navbar stays on top always */}
+      {/* ✅ Navbar stays fixed on top */}
       <Nav />
 
       <div className="flex flex-1 flex-col lg:flex-row">
@@ -72,7 +73,13 @@ const List = () => {
                 <thead className="bg-gray-200">
                   <tr>
                     <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
+                      Image
+                    </th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
                       Product Name
+                    </th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
+                      Description
                     </th>
                     <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
                       Price
@@ -88,13 +95,23 @@ const List = () => {
                       key={product._id}
                       className="border-b hover:bg-gray-50 transition"
                     >
-                      <td className="p-3">{product.name}</td>
-                      <td className="p-3">₹{product.price}</td>
-                      <td className="p-3 space-x-2 sm:space-x-3">
-                        <button className="text-blue-500 hover:text-blue-700 font-medium">
-                          Edit
-                        </button>
-                        <button className="text-red-500 hover:text-red-700 font-medium" onClick={()=>{ removelist(product._id)}}>
+                      <td className="p-3">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-16 h-16 object-cover rounded-md border"
+                        />
+                      </td>
+                      <td className="p-3 font-medium">{product.name}</td>
+                      <td className="p-3 text-gray-600">{product.description}</td>
+                      <td className="p-3 font-semibold text-gray-800">
+                        ₹{product.price}
+                      </td>
+                      <td className="p-3">
+                        <button
+                          className="text-red-500 hover:text-red-700 font-medium"
+                          onClick={() => removelist(product._id)}
+                        >
                           Delete
                         </button>
                       </td>
