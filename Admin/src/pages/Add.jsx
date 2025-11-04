@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Nav from '../components/Nav.jsx';
 import Sidebar from '../components/Sidebar.jsx';
 import upload from '../assets/upload.jpg';
@@ -19,7 +19,7 @@ const Add = () => {
   const [bestseller, setBestseller] = React.useState(false);
   const [size, setSize] = React.useState(""); // ✅ single selected size
   const [stock, setStock] = React.useState("");
-  const { serverURL } = React.useContext(AuthDataContext);
+  const { serverURL } = useContext(AuthDataContext); // ✅ assuming serverURL is constant
 
    const toggleSize = (sz) => {
     setSize((prev) =>
@@ -31,10 +31,10 @@ const Add = () => {
     e.preventDefault();
     try {
       let formdata = new FormData();
-      formdata.append("Image", Image);
-      formdata.append("Image1", Image1);
-      formdata.append("Image2", Image2);
-      formdata.append("Image3", Image3);
+      formdata.append("image", Image);
+      formdata.append("image1", Image1);
+      formdata.append("image2", Image2);
+      formdata.append("image3", Image3);
       formdata.append("name", name);
       formdata.append("description", description);
       formdata.append("category", category);
@@ -44,7 +44,7 @@ const Add = () => {
       formdata.append("size", JSON.stringify(["S", "L", "XXL"]));
       formdata.append("stock", stock);
 
-      let result = await axios.post(`${serverURL}/api/product/AddProduct`, formdata, {
+      let result = await axios.post(`${serverURL}/api/product/addproduct`, formdata, {
         withCredentials: true,
       });
 

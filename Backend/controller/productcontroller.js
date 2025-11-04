@@ -1,47 +1,51 @@
-import { json } from "express";
 import { uploadToCloudinary } from "../config/cloudinary.js";
-
+import Product from "../model/product_model.js";
 
 
 export const AddProduct = async (req, res) => {
-    try {
-        console.log("AddProduct request body:", req.body);
-        const { name, description, price, category, subcategory, size, bestsellers } = req.body;
-        console.log(req.body);
+  try {
+    console.log("AddProduct request body:", req.body);
+    console.log("enter AddProduct");
 
-        const image = req.files?.image ? await uploadToCloudinary(req.files.image[0].path, 'products') : null;
-        const image1 = req.files?.image1 ? await uploadToCloudinary(req.files.image1[0].path, 'products') : null;
-        const image2 = req.files?.image2 ? await uploadToCloudinary(req.files.image2[0].path, 'products') : null;
-        const image3 = req.files?.image3 ? await uploadToCloudinary(req.files.image3[0].path, 'products') : null;
+    const { name, description, price, category, subcategory, size, stock, bestseller } = req.body;
 
+    // Upload images one by one
+    const imageUpload = await uploadToCloudinary(req.files?.Image);
+    const image1Upload = await uploadToCloudinary(req.files?.Image1);
+    const image2Upload = await uploadToCloudinary(req.files?.Image2);
+    const image3Upload = await uploadToCloudinary(req.files?.Image3);
 
-        let productdata = {
-            name,
-            description,
-            price: Number(price),
-            category,
-            subcategory,
-            size: JSON.parse(size),
-            date: Date.now(),
-            bestsellers: bestsellers === 'true' ? true : false,
-            image,
-            image1,
-            image2,
-            image3
-        }
+    // ✅ Use only secure_url for storing in DB
+    const product = new Product({
+      name,
+      description,
+      category,
+      subcategory,
+      price,
+      bestseller: bestseller === "true",
+      size: JSON.parse(size), // since you send as '["S","L","XXL"]'
+      stock,
+      image: imageUpload?.secure_url || "",
+      image1: image1Upload?.secure_url || "",
+      image2: image2Upload?.secure_url || "",
+      image3: image3Upload?.secure_url || "",
+    });
 
-        const newProduct = await Product.create(productdata);
-        res.status(201).json(newProduct);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: error.message });
-    }
-}
+    await product.save();
+    console.log("Product saved successfully");
+    res.status(200).json({ success: true, message: "Product added successfully", product });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Error adding product", error: error.message });
+  }
+};
+
 
 
 export const GetProducts = async (req, res) => {
     try {
-        const product = await product.find();
+        const product = await Product.find();
         res.status(200).json(product);
     } catch (error) {
         console.error(error);

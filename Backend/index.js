@@ -22,6 +22,7 @@ app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/user", userroutes);
 console.log("Product routes loaded");
+console.log("enter index.js");
 app.use("/api/product", productroutes);
 
 app.listen(port, () => {
