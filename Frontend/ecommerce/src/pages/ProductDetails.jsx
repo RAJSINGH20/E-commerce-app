@@ -6,7 +6,7 @@ import Card from "../Components/Card";
 
 const ProductDetails = () => {
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopDataContext);
+  const { products, currency,addtocart } = useContext(ShopDataContext);
 
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState(false);
@@ -101,9 +101,9 @@ const ProductDetails = () => {
                 </div>
               </div>
             )}
-
+ 
             {/* Add to Cart (placeholder) */}
-            <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition">
+            <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition" onClick={()=>{addtocart(productData._id, size)}}>
               Add to Cart
             </button>
           </div>

@@ -9,14 +9,16 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { AuthDataContext } from "../context/Authcontext.jsx";
+import { ShopDataContext } from "../context/ShopContanier.jsx";
 
 const Navbar = ({ userdata, onLogout }) => {
   const [showSearch, setShowSearch] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   const [showMenu, setShowMenu] = React.useState(false);
-
   const { serverURL } = React.useContext(AuthDataContext);
+  const { getcardcount } = React.useContext(ShopDataContext);
+
   const navigate = useNavigate();
 
   const toggleSearch = () => {
@@ -133,7 +135,7 @@ const Navbar = ({ userdata, onLogout }) => {
           <div className="relative cursor-pointer hover:text-gray-900">
             <FaShoppingCart />
             <div className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
-              0
+              {getcardcount()}
             </div>
           </div>
 
