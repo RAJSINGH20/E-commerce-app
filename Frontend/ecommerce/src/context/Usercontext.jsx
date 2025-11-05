@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useContext, useState } from 'react';
 import axios from 'axios';
 import { AuthDataContext } from './Authcontext.jsx';
+
 export const userdataContext = createContext();
 
 function Usercontext({ children }) {
@@ -10,7 +11,10 @@ function Usercontext({ children }) {
   const getcurrentuser = async () => {
     try {
       console.log("Attempting to fetch current user data...");
-      let result = await axios.post(`${serverURL}/api/user/getcurrentUser`, { withCredentials: true });
+      // ✅ Use GET and move withCredentials into config
+      let result = await axios.get(`${serverURL}/api/user/getcurrentUser`, {
+        withCredentials: true,
+      });
       Setuser(result.data);
       console.log("Current user data fetched:", result.data);
     } catch (error) {
@@ -23,14 +27,12 @@ function Usercontext({ children }) {
     getcurrentuser();
   }, []);
 
-  let value = { user, Setuser , getcurrentuser};
+  let value = { user, Setuser, getcurrentuser };
 
   return (
-    <div>
-      <userdataContext.Provider value={value}>
-        {children}
-      </userdataContext.Provider>
-    </div>
+    <userdataContext.Provider value={value}>
+      {children}
+    </userdataContext.Provider>
   );
 }
 

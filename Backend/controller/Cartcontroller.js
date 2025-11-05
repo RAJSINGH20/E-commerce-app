@@ -1,4 +1,4 @@
-import User from "../model/usermodel";
+import User from "../model/usermodel.js";
 
 export const addtocart = async (req, res) => {
     try {
@@ -47,6 +47,16 @@ export const addtocart = async (req, res) => {
 
 export const updatecart = async (req, res) => {
     try {
+
+        const{itemId,size,quantity} = req.body
+        const userdata = await User.findById(req.userid)
+        let cartdata =await userdata.cartData;
+
+        cartdata[itemId][size] =quantity
+        await User.findByIdAndUpdate(req.userid,{cartdata})
+ 
+
+
         // TODO: implement update cart logic
         res.status(200).json({ message: 'Cart updated' });
     } catch (err) {
@@ -56,8 +66,9 @@ export const updatecart = async (req, res) => {
 
 export const currentuser = async (req, res) => {
     try {
-        // TODO: implement current user retrieval
-        res.status(200).json({ user: null });
+        const userdata = await User.findById(req.userid)
+        let cartdata =await userdata.cartData
+        res.status(200).json(cartdata);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

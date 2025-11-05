@@ -1,14 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AuthDataContext } from "./Authcontext";
+import { AuthDataContext } from "./Authcontext.jsx";
 import axios from "axios";
+import { userdataContext } from "./Usercontext.jsx";
 
 // ✅ Create context properly
 export const ShopDataContext = createContext();
 
 const ShopContainer = ({ children }) => {
   const [products, setProducts] = useState([]);
-  const { serverURL } = useContext(AuthDataContext); // ✅ Get serverURL from Auth context
-  let [cartitem , setcartitem]= useState({})
+  const { serverURL } = useContext(AuthDataContext); // ✅ Get serverURL and userdata from Auth context
+  let {user } = useContext(userdataContext)
+  let [cartitem, setcartitem] = useState({})
   const currency = "INR";
   const deliveryfees = 50;
 
@@ -22,29 +24,45 @@ const ShopContainer = ({ children }) => {
     }
   };
 
-  const addtocart = (itemid, size)=>{
-    if(!size){
+  const addtocart = async (itemid, size) => {
+    if (!size) {
       console.log("select product size")
       return
-}
+    }
     let cartData = structuredClone(cartitem)
 
-    if(cartData[itemid]){
+    if (cartData[itemid]) {
 
-      if(cartData[itemid][size]){
-        cartData[itemid][size]+=1
-      }else{
-        cartData[itemid][size]=1
+      if (cartData[itemid][size]) {
+        cartData[itemid][size] += 1
+      } else {
+        cartData[itemid][size] = 1
       }
-    }else{
-      cartData[itemid]={}
-      cartData[itemid][size]=1
+    } else {
+      cartData[itemid] = {}
+      cartData[itemid][size] = 1
     }
     setcartitem(cartData)
     console.log(cartData)
 
+    if (!userdata) {
+      try {
+        await axios.post(
+          `${serverURL}/api/cart/add`,  // ✅ cleaner template string
+          { itemid, size },             // ✅ use correct variable name and object keys
+          { withCredentials: true }     // ✅ include credentials for cookies/auth
+        );
+        console.log("Item added to cart successfully");
+      } catch (error) {
+        console.error("Error adding item to cart:", error);
+      }
+    }else{
+      console.log("not enterning if statment")
+    }
+
   }
-  const getcardcount = () => {
+
+const getcardcount = () => {
   let totalcount = 0;
   for (const itemId in cartitem) {
     for (const size in cartitem[itemId]) {
@@ -62,17 +80,17 @@ const ShopContainer = ({ children }) => {
 
 
 
-  useEffect(() => {
-    getProductsData();
-  }, []);
+useEffect(() => {
+  getProductsData();
+}, []);
 
-  const value = { products, currency, deliveryfees, getProductsData , cartitem ,addtocart, getcardcount ,setcartitem ,  };
+const value = { products, currency, deliveryfees, getProductsData, cartitem, addtocart, getcardcount, setcartitem, };
 
-  return (
-    <ShopDataContext.Provider value={value}>
-      {children}
-    </ShopDataContext.Provider>
-  );
+return (
+  <ShopDataContext.Provider value={value}>
+    {children}
+  </ShopDataContext.Provider>
+);
 };
 
 export default ShopContainer;
