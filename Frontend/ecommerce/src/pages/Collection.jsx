@@ -90,7 +90,7 @@ const Collection = () => {
                 key={i}
                 name={item.name}
                 image={item.image}
-                id={item.id}
+                id={item._id}
                 price={item.price}
               />
             ))}

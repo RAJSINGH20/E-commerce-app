@@ -8,6 +8,7 @@ import Collection from './pages/Collection.jsx'
 import Product from './pages/Product.jsx'
 import Contact from './pages/Contact.jsx'
 import About from './pages/About.jsx'
+import ProductDetails from './pages/ProductDetails.jsx'
 
 const App = () => {
   const hideNav = location.pathname === '/login' || location.pathname === '/Registration';
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/Collection" element={<Collection />} />
         <Route path="/Product" element={<Product />} />
         <Route path="/Contact" element={<Contact />} />
+        <Route path="/ProductDetails/:productId" element={<ProductDetails />} />
       </Routes>
     </>
   )

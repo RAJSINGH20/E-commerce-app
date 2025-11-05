@@ -1,13 +1,16 @@
 import React, { useContext } from "react";
 import { ShopDataContext } from "../context/ShopContanier";
+import { useNavigate } from "react-router-dom";
 
 function Card({ name, image, id, price }) {
   const { currency } = useContext(ShopDataContext);
+  const navigate = useNavigate(); // ✅ correct hook usage
 
   return (
     <div
       key={id}
       className="bg-white rounded-2xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden group"
+      onClick={() => navigate(`/ProductDetails/${id}`)} // ✅ proper navigation
     >
       {/* 🖼️ Product Image */}
       <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-80 xl:h-[22rem] bg-gray-100 flex items-center justify-center">

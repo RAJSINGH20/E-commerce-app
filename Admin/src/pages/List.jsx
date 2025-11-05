@@ -26,7 +26,7 @@ const List = () => {
 
   const removelist = async (id) => {
     try {
-      let result = await axios.get(`${serverURL}/api/product/removeproduct/${id}`, {
+      let result = await axios.get(`${serverURL}/api/product/removeproduct/${_id}`, {
         withCredentials: true,
       });
       console.log(result)
