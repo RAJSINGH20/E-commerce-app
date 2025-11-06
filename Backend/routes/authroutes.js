@@ -1,18 +1,23 @@
 import express from "express";
-import upload from "../middleware/multer.js"; // ✅ add .js extension (ESM requires it)
+import upload from "../middleware/multer.js";
 import {
   adminlogin,
   login,
   logout,
   registration,
-} from "../controller/authcoontroller.js"; // ✅ fixed spelling
+} from "../controller/authcoontroller.js";
+import { getcurrentUser } from "../controller/usercontroller.js";
+import IsAuthMiddleware from "../middleware/IsAuthMiddleware.js"; // ✅ import auth middleware
 
 const authRoutes = express.Router();
 
-// ✅ Routes
-authRoutes.post("/register", upload.single("profileImage"), registration); // example if you upload a file
+// ✅ Public routes
+authRoutes.post("/register", upload.single("profileImage"), registration);
 authRoutes.post("/login", login);
-authRoutes.post("/logout", logout);
 authRoutes.post("/adminlogin", adminlogin);
+
+// ✅ Protected routes (require token)
+authRoutes.get("/getcurrentUser", IsAuthMiddleware, getcurrentUser);
+authRoutes.post("/logout", logout);
 
 export default authRoutes;

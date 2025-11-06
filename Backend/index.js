@@ -24,8 +24,8 @@ app.use("/api/auth", authroutes);
 app.use("/api/user", userroutes);
 app.use("/api/cart", cartroute);
 console.log("Product routes loaded");
-console.log("enter index.js");
 app.use("/api/product", productroutes);
+console.log("enter index.js");
 
 app.listen(port, () => {
   connectdb();

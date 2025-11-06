@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
 import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { AuthDataContext } from "../context/Authcontext.jsx";
+import Usercontext from "../context/Usercontext.jsx";
 
 const Login = () => {
   // States
@@ -16,8 +17,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Contexts
-  const { serverURL } = React.useContext(AuthDataContext);
-  // const { getcurrentUser } = React.useContext(userdataContext);
+  const { serverURL } = useContext(AuthDataContext)
+  const getcurrentUser = useContext(Usercontext);
 
   // ✅ Handle Login
   const handleLogin = async (e) => {
@@ -30,7 +31,7 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const result = await axios.post(`${serverURL}/api/auth/login/`, {
+      const result = await axios.post(`${serverURL}/api/auth/login`, {
         email,
         password
       }, {
@@ -39,15 +40,18 @@ const Login = () => {
 
       console.log("✅ Login successful:", result.data);
       alert("Login successful!");
-      
+
       // ✅ Update user data
-      // getcurrentUser();
+      setTimeout(() => {
+        getcurrentUser();
+      }, 500);
+
 
       // ✅ Redirect to home
       navigate("/");
     } catch (err) {
       console.error("❌ Login failed:", err.response?.data || err.message);
-      alert("Login failed:",  err.message);
+      alert("Login failed:", err.message);
     } finally {
       setLoading(false);
     }
@@ -116,9 +120,8 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${
-              loading ? "opacity-60 cursor-not-allowed" : "hover:bg-indigo-700 hover:shadow-lg"
-            }`}
+            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${loading ? "opacity-60 cursor-not-allowed" : "hover:bg-indigo-700 hover:shadow-lg"
+              }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>

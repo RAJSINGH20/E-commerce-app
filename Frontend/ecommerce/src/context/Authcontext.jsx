@@ -1,18 +1,14 @@
-import React from 'react'
+import React, { createContext } from "react";
 
+export const AuthDataContext = createContext();
 
-export const AuthDataContext = React.createContext();
-
-function AuthProvider({ children }) {
-
-    let serverURL = "http://localhost:8000/";
-
-    let value = {serverURL};
+const AuthDataContextProvider = ({ children }) => {
+  const serverURL = "http://localhost:8000"; // your backend URL
   return (
-    <AuthDataContext.Provider value={value}>
+    <AuthDataContext.Provider value={{ serverURL }}>
       {children}
     </AuthDataContext.Provider>
-  )
-}
+  );
+};
 
-export default AuthProvider;
+export default AuthDataContextProvider;

@@ -2,19 +2,23 @@ import User from "../model/usermodel.js";
 
 export const getcurrentUser = async (req, res) => {
   try {
-    
-    // ✅ use a different variable name (e.g., userData)
-    const userData = await User.findById(req.userId).select("-password");
-    
-    if (!userData) {
+    // ✅ Ensure middleware attached req.userId
+    if (!req.userId) {
+      return res.status(401).json({ message: "Unauthorized: Missing user ID" });
+    }
+
+    const user = await User.findById(req.userId).select("-password");
+
+    if (!user) {
       console.log("User not found with ID:", req.userId);
       return res.status(404).json({ message: "User not found" });
     }
-    console.log("Fetching current user with ID:", req.userId);
 
-    return res.status(200).json(userData);
+    console.log("✅ Fetched current user:", user.name, "ID:", req.userId);
+    return res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching current user:", error.message);
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
