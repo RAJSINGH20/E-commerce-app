@@ -6,12 +6,13 @@ import {
   logout,
   registration,
 } from "../controller/authcoontroller.js"; // ✅ fixed spelling
+import { getcurrentUser } from "../controller/usercontroller.js";
 
 const authRoutes = express.Router();
 
 // ✅ Routes
 authRoutes.post("/register", upload.single("profileImage"), registration); // example if you upload a file
-authRoutes.post("/login", login);
+authRoutes.post("/login",getcurrentUser, login);
 authRoutes.post("/logout", logout);
 authRoutes.post("/adminlogin", adminlogin);
 

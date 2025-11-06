@@ -7,10 +7,10 @@ import { AuthDataContext } from '../Context/AuthCountext.jsx'; // ✅ make sure 
 
 const Add = () => {
   // ✅ All useStates at top (Hooks cannot be inside JSX)
-  const [Image, setImage] = React.useState(false);
-  const [Image1, setImage1] = React.useState(false);
-  const [Image2, setImage2] = React.useState(false);
-  const [Image3, setImage3] = React.useState(false);
+  const [image, setImage] = React.useState("");
+  const [image1, setImage1] = React.useState("");
+  const [image2, setImage2] = React.useState("");
+  const [image3, setImage3] = React.useState("");
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [category, setCategory] = React.useState("");
@@ -19,9 +19,9 @@ const Add = () => {
   const [bestseller, setBestseller] = React.useState(false);
   const [size, setSize] = React.useState(""); // ✅ single selected size
   const [stock, setStock] = React.useState("");
-  const { serverURL } = useContext(AuthDataContext); // ✅ assuming serverURL is constant
+  const serverURL = "http://localhost:8000" // ✅ assuming serverURL is constant
 
-   const toggleSize = (sz) => {
+  const toggleSize = (sz) => {
     setSize((prev) =>
       prev.includes(sz) ? prev.filter((s) => s !== sz) : [...prev, sz]
     );
@@ -31,10 +31,10 @@ const Add = () => {
     e.preventDefault();
     try {
       let formdata = new FormData();
-      formdata.append("image", Image);
-      formdata.append("image1", Image1);
-      formdata.append("image2", Image2);
-      formdata.append("image3", Image3);
+      formdata.append("image", image);
+      formdata.append("image1", image1);
+      formdata.append("image2", image2);
+      formdata.append("image3", image3);
       formdata.append("name", name);
       formdata.append("description", description);
       formdata.append("category", category);
@@ -167,24 +167,23 @@ const Add = () => {
 
             {/* Size Selector */}
             <div>
-      <p className="font-medium text-gray-700 mb-2">Select Sizes</p>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-        {["S", "M", "L", "XL", "XXL"].map((sz) => (
-          <button
-            key={sz}
-            type="button"
-            onClick={() => toggleSize(sz)} // ✅ use toggle instead of setSize
-            className={`border rounded-md py-2 text-sm sm:text-base transition-all ${
-              size.includes(sz)
-                ? "bg-lime-600 text-white border-lime-700"
-                : "bg-white text-gray-700 hover:bg-lime-100"
-            }`}
-          >
-            {sz}
-          </button>
-        ))}
-      </div>
-    </div>
+              <p className="font-medium text-gray-700 mb-2">Select Sizes</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                {["S", "M", "L", "XL", "XXL"].map((sz) => (
+                  <button
+                    key={sz}
+                    type="button"
+                    onClick={() => toggleSize(sz)} // ✅ use toggle instead of setSize
+                    className={`border rounded-md py-2 text-sm sm:text-base transition-all ${size.includes(sz)
+                        ? "bg-lime-600 text-white border-lime-700"
+                        : "bg-white text-gray-700 hover:bg-lime-100"
+                      }`}
+                  >
+                    {sz}
+                  </button>
+                ))}
+              </div>
+            </div>
 
             {/* Bestseller */}
             <div className="flex items-center">
@@ -209,7 +208,7 @@ const Add = () => {
                 {/* Image 1 */}
                 <label htmlFor="image" className="cursor-pointer flex flex-col items-center">
                   <img
-                    src={!Image ? upload : URL.createObjectURL(Image)}
+                    src={!image ? upload : URL.createObjectURL(image)}
                     alt="upload"
                     className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
                   />
@@ -227,7 +226,7 @@ const Add = () => {
                 {/* Image 2 */}
                 <label htmlFor="image1" className="cursor-pointer flex flex-col items-center">
                   <img
-                    src={!Image1 ? upload : URL.createObjectURL(Image1)}
+                    src={!image1 ? upload : URL.createObjectURL(image1)}
                     alt="upload"
                     className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
                   />
@@ -245,7 +244,7 @@ const Add = () => {
                 {/* Image 3 */}
                 <label htmlFor="image2" className="cursor-pointer flex flex-col items-center">
                   <img
-                    src={!Image2 ? upload : URL.createObjectURL(Image2)}
+                    src={!image2 ? upload : URL.createObjectURL(image2)}
                     alt="upload"
                     className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
                   />
@@ -263,7 +262,7 @@ const Add = () => {
                 {/* Image 4 */}
                 <label htmlFor="image3" className="cursor-pointer flex flex-col items-center">
                   <img
-                    src={!Image3 ? upload : URL.createObjectURL(Image3)}
+                    src={!image3 ? upload : URL.createObjectURL(image3)}
                     alt="upload"
                     className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-md mb-2 border"
                   />

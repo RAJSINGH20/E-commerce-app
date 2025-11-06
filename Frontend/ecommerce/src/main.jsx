@@ -10,9 +10,11 @@ import ShopContanier from './context/ShopContanier.jsx'
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthDataContext.Provider value={{ serverURL: "http://localhost:8000" }}>
-      <ShopContanier>
-        <App />
-      </ShopContanier>
+      <Usercontext>
+        <ShopContanier>
+          <App />
+        </ShopContanier>
+      </Usercontext>
     </AuthDataContext.Provider>
   </BrowserRouter>
 )

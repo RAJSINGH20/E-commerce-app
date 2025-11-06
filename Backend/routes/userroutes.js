@@ -6,7 +6,8 @@ import AdminAuth from '../middleware/AdminAuthMiddleware.js';
 
 const userroutes = express.Router();
 
-userroutes.post('/getcurrentUser', getcurrentUser);
+userroutes.post("/getcurrentUser", IsAuthMiddleware, getcurrentUser);
+
 userroutes.post('/getAdmin', AdminAuth, getadmin);
 
 export default userroutes;

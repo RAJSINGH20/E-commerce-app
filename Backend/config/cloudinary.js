@@ -4,9 +4,9 @@ export const uploadToCloudinary = async (filePath, folder) => {
     try {
        // Configuration
     cloudinary.config({ 
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-        api_key: process.env.CLOUDINARY_API_KEY, 
-        api_secret: process.env.CLOUDINARY_API_SECRET
+        cloud_name: 'de0ffyie2', 
+        api_key: '162981342754646', 
+        api_secret: '<your_api_secret>' // Click 'View API Keys' above to copy your API secret
     });
     
     // Upload an image
@@ -23,7 +23,7 @@ export const uploadToCloudinary = async (filePath, folder) => {
     console.log(uploadResult);
     
     // Optimize delivery by resizing and applying auto-format and auto-quality
-    const optimizeUrl = cloudinary.url('shoes', {
+    const optimizeUrl = cloudinary.url('/public', {
         fetch_format: 'auto',
         quality: 'auto'
     });
@@ -38,9 +38,7 @@ export const uploadToCloudinary = async (filePath, folder) => {
         height: 500,
     });
     
-    console.log(autoCropUrl); 
-
-    return uploadResult;
+    console.log(autoCropUrl);    
     } catch (error) {
         console.error("Error uploading to Cloudinary:", error);
     }

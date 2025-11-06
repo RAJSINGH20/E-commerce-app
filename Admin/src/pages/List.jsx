@@ -1,21 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import Nav from '../components/Nav';
-import Sidebar from '../components/Sidebar';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import Nav from "../components/Nav";
+import Sidebar from "../components/Sidebar";
+import axios from "axios";
+import { AuthDataContext } from "../Context/AuthCountext";
 
 const List = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const serverURL = "http://localhost:8000";
+  const { serverURL } = useContext(AuthDataContext); // ✅ destructure correctly
 
+  // ✅ Fetch all products
   const fetchList = async () => {
     try {
       const response = await axios.get(`${serverURL}/api/product/GetProducts`, {
         withCredentials: true,
       });
-      setList(response.data);
+
+      console.log("Fetched products:", response.data);
+
+      // ✅ Handle both response shapes: { products: [...] } or [...]
+      if (Array.isArray(response.data)) {
+        setList(response.data);
+      } else if (Array.isArray(response.data.products)) {
+        setList(response.data.products);
+      } else {
+        setList([]);
+        console.warn("Unexpected response format:", response.data);
+      }
     } catch (err) {
       console.error("Error fetching product list:", err);
       setError("Failed to fetch product list.");
@@ -24,16 +37,19 @@ const List = () => {
     }
   };
 
-  const removelist = async (id) => {
+  // ✅ Remove product
+  const removeList = async (id) => {
     try {
-      let result = await axios.get(`${serverURL}/api/product/removeproduct/${_id}`, {
+      const result = await axios.get(`${serverURL}/api/product/removeproduct/${id}`, {
         withCredentials: true,
       });
-      console.log(result)
-      if (result.data) {
-        fetchList(); // Refresh the list after deletion
+
+      console.log("Remove result:", result.data);
+
+      if (result.data && result.status === 200) {
+        fetchList(); // refresh list
       } else {
-        console.log("Deletion failed");
+        setError("Failed to remove product.");
       }
     } catch (err) {
       console.error("Error removing product:", err);
@@ -41,22 +57,23 @@ const List = () => {
     }
   };
 
+  // ✅ Fetch once on mount
   useEffect(() => {
     fetchList();
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      {/* ✅ Navbar stays fixed on top */}
+      {/* Navbar */}
       <Nav />
 
       <div className="flex flex-1 flex-col lg:flex-row">
-        {/* ✅ Sidebar (collapses below Nav on small screens) */}
+        {/* Sidebar */}
         <div className="lg:w-1/5 w-full border-b lg:border-b-0 lg:border-r bg-white">
           <Sidebar />
         </div>
 
-        {/* ✅ Main content area */}
+        {/* Main Content */}
         <div className="flex-1 p-4 sm:p-6 md:p-8 overflow-x-auto">
           <h1 className="text-xl sm:text-2xl font-bold mb-4">Product List</h1>
 
@@ -65,30 +82,21 @@ const List = () => {
             <p className="text-gray-600">Loading products...</p>
           ) : error ? (
             <p className="text-red-500">{error}</p>
-          ) : list.length === 0 ? (
+          ) : !Array.isArray(list) || list.length === 0 ? (
             <p className="text-gray-600">No products available.</p>
           ) : (
             <div className="overflow-x-auto bg-white shadow-md rounded-lg">
               <table className="min-w-full text-sm sm:text-base">
                 <thead className="bg-gray-200">
                   <tr>
-                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
-                      Image
-                    </th>
-                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
-                      Product Name
-                    </th>
-                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
-                      Description
-                    </th>
-                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
-                      Price
-                    </th>
-                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">
-                      Actions
-                    </th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">Image</th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">Product Name</th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">Description</th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">Price</th>
+                    <th className="p-3 text-left font-semibold text-gray-700 whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {list.map((product) => (
                     <tr
@@ -104,13 +112,11 @@ const List = () => {
                       </td>
                       <td className="p-3 font-medium">{product.name}</td>
                       <td className="p-3 text-gray-600">{product.description}</td>
-                      <td className="p-3 font-semibold text-gray-800">
-                        ₹{product.price}
-                      </td>
+                      <td className="p-3 font-semibold text-gray-800">₹{product.price}</td>
                       <td className="p-3">
                         <button
                           className="text-red-500 hover:text-red-700 font-medium"
-                          onClick={() => removelist(product._id)}
+                          onClick={() => removeList(product._id)}
                         >
                           Delete
                         </button>

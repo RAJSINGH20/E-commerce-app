@@ -1,25 +1,23 @@
-import React, { createContext, useEffect, useContext, useState } from 'react';
-import axios from 'axios';
-import { AuthDataContext } from './Authcontext.jsx';
+import React, { createContext, useEffect, useContext, useState } from "react";
+import axios from "axios";
+import { AuthDataContext } from "./Authcontext.jsx";
 
 export const userdataContext = createContext();
 
-function Usercontext({ children }) {
-  let [user, Setuser] = useState(null);
-  const { serverURL } = useContext(AuthDataContext);
+const Usercontext = ({ children }) => {
+  let [userData, setUserData] = useState(null);
+  const serverURL = useContext(AuthDataContext)
 
   const getcurrentuser = async () => {
     try {
-      console.log("Attempting to fetch current user data...");
-      // ✅ Use GET and move withCredentials into config
-      let result = await axios.get(`${serverURL}/api/user/getcurrentUser`, {
-        withCredentials: true,
-      });
-      Setuser(result.data);
-      console.log("Current user data fetched:", result.data);
+      console.log("Fetching current user..........");
+      const result =await axios.get(serverURL + "/api/user/getcurrentUser", { withCredentials: true })
+
+      setUserData(result.data);
+      console.log("User fetched:", result.status);
     } catch (error) {
-      console.log(`Error fetching current user: ${error.message}`);
-      Setuser(null);
+      console.error("Error fetching current user:", error.message);
+      // setUserData(null);
     }
   };
 
@@ -27,13 +25,12 @@ function Usercontext({ children }) {
     getcurrentuser();
   }, []);
 
-  let value = { user, Setuser, getcurrentuser };
-
+  const value = { userData, setUserData, getcurrentuser };
   return (
     <userdataContext.Provider value={value}>
       {children}
     </userdataContext.Provider>
   );
-}
+};
 
 export default Usercontext;

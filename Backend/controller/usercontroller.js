@@ -3,16 +3,16 @@ import User from "../model/usermodel.js";
 export const getcurrentUser = async (req, res) => {
   try {
     
-    // ✅ use a different variable name (e.g., userData)
-    const userData = await User.findById(req.userId).select("-password");
+    // ✅ use a different variable name (e.g., user)
+    const user = await User.findById(req.userId).select("-password");
     
-    if (!userData) {
+    if (!user) {
       console.log("User not found with ID:", req.userId);
       return res.status(404).json({ message: "User not found" });
     }
     console.log("Fetching current user with ID:", req.userId);
 
-    return res.status(200).json(userData);
+    return res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

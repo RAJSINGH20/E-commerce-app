@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
 import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Contexts
-  const { serverURL } = React.useContext(AuthDataContext);
+  const serverURL=useContext(AuthDataContext)
   // const { getcurrentUser } = React.useContext(userdataContext);
 
   // ✅ Handle Login
@@ -30,7 +30,7 @@ const Login = () => {
 
     setLoading(true);
     try {
-      const result = await axios.post(`${serverURL}/api/auth/login/`, {
+      const result = await axios.post(`${serverURL}/api/auth/login`, {
         email,
         password
       }, {
