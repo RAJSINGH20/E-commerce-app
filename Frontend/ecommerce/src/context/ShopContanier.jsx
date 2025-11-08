@@ -9,7 +9,11 @@ export const ShopDataContext = createContext();
 const ShopContainer = ({ children }) => {
   const [products, setProducts] = useState([]);
   const { serverURL } = useContext(AuthDataContext);
+<<<<<<< HEAD
   const { userData } = useContext(userdataContext);
+=======
+  const { user } = useContext(userdataContext) || {}; // ✅ safe destructuring
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
   const [cartitem, setcartitem] = useState({});
   const currency = "INR";
   const deliveryfees = 50;
@@ -29,7 +33,10 @@ const ShopContainer = ({ children }) => {
       return;
     }
 
+<<<<<<< HEAD
     // local cart update
+=======
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
     let cartData = structuredClone(cartitem);
     if (cartData[itemid]) {
       if (cartData[itemid][size]) {
@@ -41,6 +48,7 @@ const ShopContainer = ({ children }) => {
       cartData[itemid] = {};
       cartData[itemid][size] = 1;
     }
+<<<<<<< HEAD
     setcartitem(cartData);
     console.log("Updated cart (local):", cartData);
 
@@ -57,11 +65,39 @@ const ShopContainer = ({ children }) => {
         if (result.data?.cart) {
           setcartitem(result.data.cart);
         } 
+=======
+
+    setcartitem(cartData);
+    console.log("Updated cart:", cartData);
+
+    if (user) {
+      console.log(user)
+      try {
+        let result=await axios.post(
+          `${serverURL}/api/cart/add`,
+          { itemid, size },
+          { withCredentials: true }
+        );
+        console.log("Item added to cart successfully",result.data);
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
       } catch (error) {
         console.error("Error adding item to cart:", error);
       }
     } else {
       console.log("User not logged in");
+<<<<<<< HEAD
+=======
+    }
+  };
+
+  const getUserCart = async()=>{
+    try {
+      const result = await axios.post(`${serverURL}/api/cart/get`,{},{withCredentials:true})
+
+      setcartitem(result.data)
+    } catch (error) {
+      console.log("get use cart is not loaded" ,error.message)
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
     }
   };
 
@@ -108,7 +144,11 @@ const ShopContainer = ({ children }) => {
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
     getUserCart();
+=======
+   getUserCart()
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
   }, []);
 
   const value = {
@@ -120,10 +160,20 @@ const ShopContainer = ({ children }) => {
     addtocart,
     getcardcount,
     setcartitem,
+<<<<<<< HEAD
     updatequantity,
   };
 
   return <ShopDataContext.Provider value={value}>{children}</ShopDataContext.Provider>;
+=======
+  };
+
+  return (
+    <ShopDataContext.Provider value={value}>
+      {children}
+    </ShopDataContext.Provider>
+  );
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
 };
 
 export default ShopContainer;

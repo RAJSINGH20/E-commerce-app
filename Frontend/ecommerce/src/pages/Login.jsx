@@ -17,8 +17,13 @@ const Login = () => {
   const navigate = useNavigate();
 
   // Contexts
+<<<<<<< HEAD
   const { serverURL } = useContext(AuthDataContext)
   const getcurrentUser = useContext(Usercontext);
+=======
+  const serverURL=useContext(AuthDataContext)
+  // const { getcurrentUser } = React.useContext(userdataContext);
+>>>>>>> 4527c894244b91a310113a385744b68fb90161bc
 
   // ✅ Handle Login
   const handleLogin = async (e) => {
