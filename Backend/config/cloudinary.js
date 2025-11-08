@@ -1,68 +1,33 @@
-import { v2 as cloudinary } from 'cloudinary';
-import dotenv from 'dotenv';
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+
 dotenv.config();
 
-<<<<<<< HEAD
+// ✅ Configure Cloudinary using environment variables
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+/**
+ * Upload a local file to Cloudinary
+ * @param {string} localFilePath - Path of the file to upload
+ * @param {string} folder - Cloudinary folder name (default: "products")
+ * @returns {Promise<object>} - Cloudinary upload response
+ */
 export const uploadToCloudinary = async (localFilePath, folder = "products") => {
   try {
     const result = await cloudinary.uploader.upload(localFilePath, {
       folder,
-      resource_type: "auto",
+      resource_type: "auto", // allows image, video, etc.
     });
+    console.log("✅ Uploaded to Cloudinary:", result.secure_url);
     return result;
   } catch (error) {
     console.error("❌ Cloudinary upload error:", error);
     throw new Error("Cloudinary upload failed");
   }
 };
-=======
-export const uploadToCloudinary = async (filePath, folder) => {
-    try {
-       // Configuration
-    cloudinary.config({ 
-        cloud_name: 'de0ffyie2', 
-        api_key: '162981342754646', 
-        api_secret: '<your_api_secret>' // Click 'View API Keys' above to copy your API secret
-    });
-    
-    // Upload an image
-     const uploadResult = await cloudinary.uploader
-       .upload(
-           'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
-               public_id: 'shoes',
-           }
-       )
-       .catch((error) => {
-           console.log(error);
-       });
-    
-    console.log(uploadResult);
-    
-    // Optimize delivery by resizing and applying auto-format and auto-quality
-    const optimizeUrl = cloudinary.url('/public', {
-        fetch_format: 'auto',
-        quality: 'auto'
-    });
-    
-    console.log(optimizeUrl);
-    
-    // Transform the image: auto-crop to square aspect_ratio
-    const autoCropUrl = cloudinary.url('shoes', {
-        crop: 'auto',
-        gravity: 'auto',
-        width: 500,
-        height: 500,
-    });
-    
-    console.log(autoCropUrl);    
-    } catch (error) {
-        console.error("Error uploading to Cloudinary:", error);
-    }
-}
->>>>>>> 4527c894244b91a310113a385744b68fb90161bc
+
+export default cloudinary;

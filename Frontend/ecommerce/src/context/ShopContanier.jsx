@@ -67,10 +67,7 @@ const ShopContainer = ({ children }) => {
   const getUserCart = async () => {
     try {
       console.log("Fetching user cart...");
-      const result = await axios.post(
-        `${serverURL}/api/cart/get`,
-        {},
-        { withCredentials: true }
+      const result = await axios.post(serverURL+"/api/cart/get",{},{ withCredentials: true }
       );
       setcartitem(result.data);
     } catch (error) {

@@ -25,10 +25,8 @@ app.use("/api/user", userroutes);
 app.use("/api/cart", cartroute);
 app.use("/api/product", productroutes);
 console.log("Product routes loaded");
-<<<<<<< HEAD
-app.use("/api/product", productroutes);
-=======
->>>>>>> 4527c894244b91a310113a385744b68fb90161bc
+
+
 console.log("enter index.js");
 
 app.listen(port, () => {

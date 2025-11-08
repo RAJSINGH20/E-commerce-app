@@ -18,7 +18,7 @@ const Login = () => {
 
   // Contexts
   const { serverURL } = useContext(AuthDataContext)
-  const getcurrentUser = useContext(Usercontext);
+  const {getcurrentUser} = useContext(Usercontext);
   // const { getcurrentUser } = React.useContext(userdataContext);
 
   // ✅ Handle Login

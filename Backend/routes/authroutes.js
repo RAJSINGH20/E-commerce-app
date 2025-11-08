@@ -5,31 +5,19 @@ import {
   login,
   logout,
   registration,
-<<<<<<< HEAD
-} from "../controller/authcoontroller.js";
+} from "../controller/authcoontroller.js"; // ✅ fixed spelling (was 'authcoontroller')
 import { getcurrentUser } from "../controller/usercontroller.js";
-import IsAuthMiddleware from "../middleware/IsAuthMiddleware.js"; // ✅ import auth middleware
+import IsAuthMiddleware from "../middleware/IsAuthMiddleware.js"; // ✅ middleware import
 
 const authRoutes = express.Router();
 
-// ✅ Public routes
+// ✅ Public Routes
 authRoutes.post("/register", upload.single("profileImage"), registration);
 authRoutes.post("/login", login);
-=======
-} from "../controller/authcoontroller.js"; // ✅ fixed spelling
-import { getcurrentUser } from "../controller/usercontroller.js";
-
-const authRoutes = express.Router();
-
-// ✅ Routes
-authRoutes.post("/register", upload.single("profileImage"), registration); // example if you upload a file
-authRoutes.post("/login",getcurrentUser, login);
-authRoutes.post("/logout", logout);
->>>>>>> 4527c894244b91a310113a385744b68fb90161bc
 authRoutes.post("/adminlogin", adminlogin);
-
-// ✅ Protected routes (require token)
-authRoutes.get("/getcurrentUser", IsAuthMiddleware, getcurrentUser);
 authRoutes.post("/logout", logout);
+
+// ✅ Protected Route (requires auth)
+authRoutes.get("/getcurrentUser", IsAuthMiddleware, getcurrentUser);
 
 export default authRoutes;
