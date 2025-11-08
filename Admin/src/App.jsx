@@ -1,6 +1,6 @@
 import React from 'react'
 import Home from './pages/Home'
-import Add from './pages/Add'
+import Add from './pages/Add.jsx'
 import Orders from './pages/Orders'
 import Login from './pages/Login.jsx'
 import List from './pages/List'

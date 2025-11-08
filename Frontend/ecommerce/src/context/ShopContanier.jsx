@@ -1,3 +1,4 @@
+// ShopContainer.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthDataContext } from "./Authcontext.jsx";
 import { userdataContext } from "./Usercontext.jsx";
@@ -8,14 +9,14 @@ export const ShopDataContext = createContext();
 const ShopContainer = ({ children }) => {
   const [products, setProducts] = useState([]);
   const { serverURL } = useContext(AuthDataContext);
-  const { user } = useContext(userdataContext) || {}; // ✅ safe destructuring
+  const { userData } = useContext(userdataContext);
   const [cartitem, setcartitem] = useState({});
   const currency = "INR";
   const deliveryfees = 50;
 
   const getProductsData = async () => {
     try {
-      const result = await axios.get(`${serverURL}/api/product/GetProducts`,{withCredentials:true});
+      const result = await axios.get(`${serverURL}/api/product/GetProducts`, { withCredentials: true });
       setProducts(result.data);
     } catch (error) {
       console.error("Error fetching products data:", error);
@@ -28,6 +29,7 @@ const ShopContainer = ({ children }) => {
       return;
     }
 
+    // local cart update
     let cartData = structuredClone(cartitem);
     if (cartData[itemid]) {
       if (cartData[itemid][size]) {
@@ -39,19 +41,22 @@ const ShopContainer = ({ children }) => {
       cartData[itemid] = {};
       cartData[itemid][size] = 1;
     }
-
     setcartitem(cartData);
-    console.log("Updated cart:", cartData);
+    console.log("Updated cart (local):", cartData);
 
-    if (!user) {
-      console.log(user)
+    if (userData) {
       try {
-        let result=await axios.post(
-          `${serverURL}/api/cart/get`,
-          { itemid, size },
+        // NOTE: use /add endpoint and match backend field names
+        const result = await axios.post(
+          `${serverURL}/api/cart/add`,
+          { itemId: itemid, size },
           { withCredentials: true }
         );
-        console.log("Item added to cart successfully",result.data);
+        console.log("Item added to cart successfully", result.data);
+        // update local cart with server response (if sent)
+        if (result.data?.cart) {
+          setcartitem(result.data.cart);
+        } 
       } catch (error) {
         console.error("Error adding item to cart:", error);
       }
@@ -60,15 +65,32 @@ const ShopContainer = ({ children }) => {
     }
   };
 
-  const getUserCart = async()=>{
+  const getUserCart = async () => {
     try {
-      const result = await axios.post(`${serverURL}/api/cart/get`,{},{withCredentials:true})
-
-      setcartitem(result.data)
+      console.log("entered get user cart");
+      const result = await axios.post(`${serverURL}/api/cart/get`, {}, { withCredentials: true });
+      setcartitem(result.data);
     } catch (error) {
-      console.log("get use cart is not loaded" ,error.message)
+      console.log("get user cart is not loaded", error.message);
     }
+  };
+  const updatequantity = async(itemId , size , quantity)=>{
+    try {
+      let cartData= structuredClone(cartitem)
+      cartData[itemId][size]= quantity
+      setcartitem(cartData)
 
+      if(userData){
+        try {
+          await axios.post(serverURL+'/api/cart//update',{itemId,size,quantity},{withCredentials:true})
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+    } catch (error) {
+      console.log("error",error)
+    }
   }
 
   const getcardcount = () => {
@@ -86,7 +108,7 @@ const ShopContainer = ({ children }) => {
   }, []);
 
   useEffect(() => {
-   getUserCart()
+    getUserCart();
   }, []);
 
   const value = {
@@ -98,13 +120,10 @@ const ShopContainer = ({ children }) => {
     addtocart,
     getcardcount,
     setcartitem,
+    updatequantity,
   };
 
-  return (
-    <ShopDataContext.Provider value={value}>
-      {children}
-    </ShopDataContext.Provider>
-  );
+  return <ShopDataContext.Provider value={value}>{children}</ShopDataContext.Provider>;
 };
 
 export default ShopContainer;
