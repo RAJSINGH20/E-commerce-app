@@ -1,15 +1,11 @@
-import Express from "express"
-import { addtocart, currentuser, updatecart } from "../controller/Cartcontroller.js"
-import IsAuthMiddleware from "../middleware/isauthmiddleware.js"
+import Express from "express";
+import { addtocart, currentuser, updatecart } from "../controller/Cartcontroller.js";
+import IsAuthMiddleware from "../middleware/isauthmiddleware.js";
 
-const cartroute = Express.Router()
+const cartroute = Express.Router();
 
-
-cartroute.post("/get", IsAuthMiddleware, currentuser);
+cartroute.post("/add", IsAuthMiddleware, addtocart);
 cartroute.post("/update", IsAuthMiddleware, updatecart);
-cartroute.post("/current", IsAuthMiddleware, addtocart);
+cartroute.post("/get", IsAuthMiddleware, currentuser);
 
-
-
-
-export default cartroute
+export default cartroute;

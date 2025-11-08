@@ -3,11 +3,11 @@ import User from "../model/usermodel.js";
 export const getcurrentUser = async (req, res) => {
   try {
     // ✅ Ensure middleware attached req.userId
+    const user = await User.findById(req.userId).select("-password");
     if (!req.userId) {
       return res.status(401).json({ message: "Unauthorized: Missing user ID" });
     }
 
-    const user = await User.findById(req.userId).select("-password");
 
     if (!user) {
       console.log("User not found with ID:", req.userId);

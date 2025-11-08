@@ -65,11 +65,11 @@ export const updatecart = async (req, res) => {
 }
 
 export const currentuser = async (req, res) => {
-    try {
-        const userdata = await User.findById(req.userid)
-        let cartdata =await userdata.cartData
-        res.status(200).json(cartdata);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-}
+  try {
+    const userdata = await User.findById(req.userid);
+    const cartdata = userdata.cartData || {};
+    res.status(200).json(cartdata);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
