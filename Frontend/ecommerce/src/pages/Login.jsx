@@ -18,7 +18,7 @@ const Login = () => {
 
   // Contexts
   const { serverURL } = useContext(AuthDataContext)
-  const {getcurrentUser} = useContext(Usercontext);
+  const getcurrentuser = useContext(Usercontext);
   // const { getcurrentUser } = React.useContext(userdataContext);
 
   // ✅ Handle Login
@@ -44,7 +44,7 @@ const Login = () => {
 
       // ✅ Update user data
       setTimeout(() => {
-        getcurrentUser();
+        getcurrentuser();
       }, 500);
 
 

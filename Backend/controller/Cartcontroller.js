@@ -2,44 +2,39 @@ import User from "../model/usermodel.js";
 
 export const addtocart = async (req, res) => {
     try {
-        // Assuming the request body is like { itemId, size }
-        const { itemId, size } = req.body; 
-        
+        const { itemId, size } = req.body;
+
         if (!itemId || !size) {
-            return res.status(400).json({ error: 'Item ID and size are required' });
+            return res.status(400).json({ error: "Item ID and size are required" });
         }
 
-        // Find user by ID (ensure req.userid is populated by your authentication middleware)
-        const user = await User.findById(req.userid);
-        
+        const user = await User.findById(req.userId).select("-password");
+        if (!req.userId) {
+            return res.status(401).json({ message: "Unauthorized: Missing user ID" });
+        }
+
+
+
+        // ✅ use a different variable name (e.g., user)
+
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            console.log("User not found with ID:", req.userId);
+            return res.status(404).json({ message: "User not found" });
         }
-
-        // Use cartData object from user document (initialize if missing)
-        
+        // ✅ Initialize cartData if missing
         const cartData = user.cartData || {};
 
-        // If the item already exists in the cart, increment the quantity for the selected size
-        if (cartData[itemId]) {
-            if (cartData[itemId][size]) {
-                cartData[itemId][size] += 1;
-            } else {
-                cartData[itemId][size] = 1;
-            }
-        } else {
-            // If the item doesn't exist, create a new entry
-            cartData[itemId]={}
-            cartData[itemId][size] = 1
-        }
+        // ✅ Add or update the cart item
+        if (!cartData[itemId]) cartData[itemId] = {};
+        cartData[itemId][size] = (cartData[itemId][size] || 0) + 1;
 
-        // Persist changes back to the user document
-        await User.findByIdAndUpdate(req.userid,{cartData})
-        
+        // ✅ Save updated cart data
+        user.cartData = cartData;
+        await user.save();
 
-        res.status(200).json({ message: 'Item added to cart', cart: user.cartData });
+        res.status(200).json({ message: "Item added to cart", cart: user.cartData });
     } catch (err) {
-        console.error(err);
+        console.error("Add to cart error:", err);
         res.status(500).json({ error: err.message });
     }
 };
@@ -47,29 +42,48 @@ export const addtocart = async (req, res) => {
 
 export const updatecart = async (req, res) => {
     try {
+        const { itemId, size, quantity } = req.body;
 
-        const{itemId,size,quantity} = req.body
-        const userdata = await User.findById(req.userid)
-        let cartdata =await userdata.cartData;
+        const user = await User.findById(req.userId).select("-password");
+        if (!req.userId) {
+            return res.status(401).json({ message: "Unauthorized: Missing user ID" });
+        }
 
-        cartdata[itemId][size] =quantity
-        await User.findByIdAndUpdate(req.userid,{cartdata})
- 
+        if (!user) {
+            console.log("User not found with ID:", req.userId);
+            return res.status(404).json({ message: "User not found" });
+        }
+        const cartData = user.cartData || {};
 
+        if (!cartData[itemId]) cartData[itemId] = {};
+        cartData[itemId][size] = quantity;
 
-        // TODO: implement update cart logic
-        res.status(200).json({ message: 'Cart updated' });
+        user.cartData = cartData;
+        await user.save();
+
+        res.status(200).json({ message: "Cart updated", cart: user.cartData });
     } catch (err) {
+        console.error("Update cart error:", err);
         res.status(500).json({ error: err.message });
     }
-}
+};
+
 
 export const currentuser = async (req, res) => {
-  try {
-    const userdata = await User.findById(req.userid);
-    const cartdata = userdata.cartData || {};
-    res.status(200).json(cartdata);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const user = await User.findById(req.userId).select("-password");
+        if (!req.userId) {
+            return res.status(401).json({ message: "Unauthorized: Missing user ID" });
+        }
+
+        if (!user) {
+            console.log("User not found with ID:", req.userId);
+            return res.status(404).json({ message: "User not found" });
+        }
+        const cartData = user.cartData || {};
+        res.status(200).json(cartData);
+    } catch (err) {
+        console.error("Current user fetch error:", err);
+        res.status(500).json({ error: err.message });
+    }
 };

@@ -47,11 +47,7 @@ const ShopContainer = ({ children }) => {
     // sync with backend if user logged in
     if (userData) {
       try {
-        const result = await axios.post(
-          `${serverURL}/api/cart/add`,
-          { itemId, size },
-          { withCredentials: true }
-        );
+        const result = await axios.post(serverURL+"/api/cart/add",{ itemId, size },{ withCredentials: true });
         console.log("Item added to cart successfully:", result.data);
 
         if (result.data?.cart) setcartitem(result.data.cart);

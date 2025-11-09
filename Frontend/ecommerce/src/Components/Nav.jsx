@@ -111,25 +111,14 @@ const Navbar = ({ userdata, onLogout }) => {
           </div>
 
           {/* Profile */}
-          {!userdata ? (
+          
             <div
               className="cursor-pointer hover:text-gray-900"
               onClick={toggleDropdown}
             >
               <FaUserCircle />
             </div>
-          ) : (
-            <div
-              className="cursor-pointer hover:text-gray-900 bg-gray-800 text-white w-8 h-8 flex items-center justify-center rounded-full text-sm"
-              onClick={toggleDropdown}
-            >
-              {userdata?.name
-                ? userdata.name.slice(0, 1).toUpperCase()
-                : userdata?.username
-                ? userdata.username.slice(0, 1).toUpperCase()
-                : ""}
-            </div>
-          )}
+          
 
           {/* Cart */}
           <div className="relative cursor-pointer hover:text-gray-900">
