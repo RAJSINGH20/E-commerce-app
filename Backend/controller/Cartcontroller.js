@@ -1,43 +1,48 @@
 import User from "../model/usermodel.js";
 
 export const addtocart = async (req, res) => {
-    try {
-        const { itemId, size } = req.body;
+  try {
+    const { itemId, size } = req.body;
 
-        if (!itemId || !size) {
-            return res.status(400).json({ error: "Item ID and size are required" });
-        }
-
-        const user = await User.findById(req.userId).select("-password");
-        if (!req.userId) {
-            return res.status(401).json({ message: "Unauthorized: Missing user ID" });
-        }
-
-
-
-        // ✅ use a different variable name (e.g., user)
-
-        if (!user) {
-            console.log("User not found with ID:", req.userId);
-            return res.status(404).json({ message: "User not found" });
-        }
-        // ✅ Initialize cartData if missing
-        const cartData = user.cartData || {};
-
-        // ✅ Add or update the cart item
-        if (!cartData[itemId]) cartData[itemId] = {};
-        cartData[itemId][size] = (cartData[itemId][size] || 0) + 1;
-
-        // ✅ Save updated cart data
-        user.cartData = cartData;
-        await user.save();
-
-        res.status(200).json({ message: "Item added to cart", cart: user.cartData });
-    } catch (err) {
-        console.error("Add to cart error:", err);
-        res.status(500).json({ error: err.message });
+    if (!itemId || !size) {
+      return res.status(400).json({ error: "Item ID and size are required" });
     }
+
+    if (!req.userId) {
+      return res.status(401).json({ message: "Unauthorized: Missing user ID" });
+    }
+
+    const user = await User.findById(req.userId).select("-password");
+    if (!user) {
+      console.log("User not found with ID:", req.userId);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ✅ Always initialize cartData if missing
+    if (!user.cartData) {
+      user.cartData = {};
+    }
+
+    // ✅ Add or update the cart item
+    if (!user.cartData[itemId]) user.cartData[itemId] = {};
+    user.cartData[itemId][size] = (user.cartData[itemId][size] || 0) + 1;
+
+    // ✅ Force Mongoose to recognize the field as modified
+    user.markModified("cartData");
+
+    // ✅ Save and verify
+    await user.save();
+
+    res.status(200).json({
+      message: "Item added to cart successfully",
+      cart: user.cartData,
+    });
+  } catch (err) {
+    console.error("Add to cart error:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 
 export const updatecart = async (req, res) => {

@@ -1,21 +1,27 @@
-import React from 'react'
-import Registration from './pages/Registration.jsx'
-import { Route, Routes } from 'react-router-dom'
-import Login from './pages/Login.jsx'
-import Home from './pages/Home.jsx'
-import Nav from './Components/Nav.jsx'
-import Collection from './pages/Collection.jsx'
-import Product from './pages/Product.jsx'
-import Contact from './pages/Contact.jsx'
-import About from './pages/About.jsx'
-import ProductDetails from './pages/ProductDetails.jsx'
+import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+
+import Nav from "./Components/Nav.jsx";
+import Registration from "./pages/Registration.jsx";
+import Login from "./pages/Login.jsx";
+import Home from "./pages/Home.jsx";
+import Collection from "./pages/Collection.jsx";
+import Product from "./pages/Product.jsx";
+import Contact from "./pages/Contact.jsx";
+import About from "./pages/About.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import Cart from "./pages/Cart.jsx";
 
 const App = () => {
-  const hideNav = location.pathname === '/login' || location.pathname === '/Registration';
+  const location = useLocation(); // ✅ React Router hook
+  const hideNav =
+    location.pathname === "/login" || location.pathname === "/Registration";
+
   return (
     <>
-      {/* ✅ Navbar visible only when logged in and not on login/register pages */}
+      {/* ✅ Navbar visible on all pages except login/register */}
       {!hideNav && <Nav />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Registration" element={<Registration />} />
@@ -25,9 +31,10 @@ const App = () => {
         <Route path="/Product" element={<Product />} />
         <Route path="/Contact" element={<Contact />} />
         <Route path="/ProductDetails/:productId" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

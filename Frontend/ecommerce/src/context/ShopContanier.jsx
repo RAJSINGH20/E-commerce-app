@@ -90,16 +90,28 @@ const ShopContainer = ({ children }) => {
     }
   };
 
-  // ✅ Get total cart count
-  const getcardcount = () => {
-    let totalcount = 0;
-    for (const itemId in cartitem) {
-      for (const size in cartitem[itemId]) {
-        totalcount += cartitem[itemId][size];
+  
+
+  const getcartCount = ()=>{
+    try {
+      let totalamount=0
+      for (const items in cartitem) {
+        let iteminfo = products.find((products)=>products._id ===items)
+        for(const item in cartitem[items]){
+          try {
+            if(cartitem[items][item] >0){
+              totalamount+= iteminfo.price * cartitem[items][item]
+            }
+          } catch (error) {
+            console.log("error",error)
+          }
+        }
       }
+      return totalamount
+    } catch (error) {
+      console.log("error",error)
     }
-    return totalcount;
-  };
+  }
 
   // ✅ useEffects
   useEffect(() => {
@@ -116,9 +128,9 @@ const ShopContainer = ({ children }) => {
     deliveryfees,
     cartitem,
     addtocart,
-    getcardcount,
     setcartitem,
     updatequantity,
+    getcartCount
   };
 
   return (

@@ -17,7 +17,7 @@ const Navbar = ({ userdata, onLogout }) => {
   const [searchValue, setSearchValue] = React.useState("");
   const [showMenu, setShowMenu] = React.useState(false);
   const { serverURL } = React.useContext(AuthDataContext);
-  const { getcardcount } = React.useContext(ShopDataContext);
+  const { getcartCount } = React.useContext(ShopDataContext);
 
   const navigate = useNavigate();
 
@@ -122,9 +122,9 @@ const Navbar = ({ userdata, onLogout }) => {
 
           {/* Cart */}
           <div className="relative cursor-pointer hover:text-gray-900">
-            <FaShoppingCart />
+            <FaShoppingCart onClick={()=>{navigate("/cart")}} />
             <div className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
-              {getcardcount()}
+              {getcartCount()}
             </div>
           </div>
 
