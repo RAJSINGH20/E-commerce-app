@@ -12,6 +12,8 @@ import About from "./pages/About.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Cart from "./pages/Cart.jsx";
 import PlaceOrder from "./pages/PlaceOrder.jsx";
+import Order from "./pages/Order.jsx";
+import Orders from "./pages/Order.jsx";
 
 const App = () => {
   const location = useLocation(); // ✅ React Router hook
@@ -34,6 +36,7 @@ const App = () => {
         <Route path="/ProductDetails/:productId" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/PlaceOrder" element={<PlaceOrder />} />
+        <Route path="/Order" element={<Orders />} />
       </Routes>
     </>
   );

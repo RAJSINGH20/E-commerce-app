@@ -72,7 +72,7 @@ const Checkout = () => {
       setAddress("");
 
       // Optional redirect after 2s
-      setTimeout(() => navigate("/orders"), 2000);
+      setTimeout(() => navigate("/Order"), 2000);
     } catch (error) {
       console.error("Order Error:", error);
       setMessage(error.response?.data?.message || "Failed to place order.");

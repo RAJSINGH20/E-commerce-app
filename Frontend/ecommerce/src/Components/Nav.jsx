@@ -8,6 +8,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { BsFillBagCheckFill } from "react-icons/bs"; // ✅ Correct import for order icon
 import { AuthDataContext } from "../context/Authcontext.jsx";
 import { ShopDataContext } from "../context/ShopContanier.jsx";
 
@@ -16,11 +17,12 @@ const Navbar = ({ userdata, onLogout }) => {
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   const [showMenu, setShowMenu] = React.useState(false);
+
   const { serverURL } = React.useContext(AuthDataContext);
   const { getcartCount } = React.useContext(ShopDataContext);
-
   const navigate = useNavigate();
 
+  // 🔍 Toggles
   const toggleSearch = () => {
     setShowSearch(!showSearch);
     setShowDropdown(false);
@@ -37,6 +39,7 @@ const Navbar = ({ userdata, onLogout }) => {
     setShowDropdown(false);
   };
 
+  // 🚪 Logout
   const logout = async () => {
     try {
       const res = await axios.post(
@@ -63,7 +66,10 @@ const Navbar = ({ userdata, onLogout }) => {
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-3 bg-[#e7f1ef] shadow-md">
         {/* Left - Logo */}
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/")}>
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <img
             src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
             alt="logo"
@@ -72,109 +78,76 @@ const Navbar = ({ userdata, onLogout }) => {
           <div className="text-xl font-semibold text-gray-700">OneCart</div>
         </div>
 
-        {/* Middle - Links (Hidden on mobile) */}
+        {/* Middle - Links */}
         <div className="hidden md:flex gap-4">
-          <Link
-            to="/"
-            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
-          >
-            HOME
-          </Link>
-          <Link
-            to="/Collection"
-            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
-          >
-            COLLECTIONS
-          </Link>
-          <Link
-            to="/About"
-            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
-          >
-            ABOUT
-          </Link>
-          <Link
-            to="/Contact"
-            className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
-          >
-            CONTACT
-          </Link>
+          {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
+            <Link
+              key={item}
+              to={`/${item === "HOME" ? "" : item}`}
+              className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition"
+            >
+              {item}
+            </Link>
+          ))}
         </div>
 
-        {/* Right - Icons */}
+        {/* Right Icons */}
         <div className="flex items-center gap-4 text-gray-700 text-xl relative">
-          {/* Search */}
-          <div
-            className="cursor-pointer hover:text-gray-900"
-            onClick={toggleSearch}
-          >
+          {/* 🔍 Search */}
+          <div className="cursor-pointer hover:text-gray-900" onClick={toggleSearch}>
             <FaSearch />
           </div>
 
-          {/* Profile */}
-          
-            <div
-              className="cursor-pointer hover:text-gray-900"
-              onClick={toggleDropdown}
-            >
-              <FaUserCircle />
-            </div>
-          
+          {/* 👤 Profile */}
+          <div className="cursor-pointer hover:text-gray-900" onClick={toggleDropdown}>
+            <FaUserCircle />
+          </div>
 
-          {/* Cart */}
-          <div className="relative cursor-pointer hover:text-gray-900" onClick={()=>{navigate("/cart")}}>
-            <FaShoppingCart  />
+          {/* 🛍️ Orders */}
+          <div
+            className="cursor-pointer hover:text-gray-900"
+            onClick={() => navigate("/Order")}
+          >
+            <BsFillBagCheckFill />
+          </div>
+
+          {/* 🛒 Cart */}
+          <div
+            className="relative cursor-pointer hover:text-gray-900"
+            onClick={() => navigate("/cart")}
+          >
+            <FaShoppingCart />
             <div className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
               {getcartCount()}
             </div>
           </div>
 
-          {/* Hamburger (Mobile only) */}
-          <div
-            className="md:hidden cursor-pointer hover:text-gray-900"
-            onClick={toggleMenu}
-          >
+          {/* ☰ Mobile Menu */}
+          <div className="md:hidden cursor-pointer hover:text-gray-900" onClick={toggleMenu}>
             {showMenu ? <FaTimes /> : <FaBars />}
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* 📱 Mobile Menu */}
       {showMenu && (
         <div className="md:hidden bg-white shadow-md border-t border-gray-200 absolute top-14 left-0 w-full z-10 animate-slideDown">
           <div className="flex flex-col gap-3 p-4">
-            <Link
-              to="/"
-              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
-              onClick={() => setShowMenu(false)}
-            >
-              HOME
-            </Link>
-            <Link
-              to="/Collection"
-              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
-              onClick={() => setShowMenu(false)}
-            >
-              COLLECTIONS
-            </Link>
-            <Link
-              to="/About"
-              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
-              onClick={() => setShowMenu(false)}
-            >
-              ABOUT
-            </Link>
-            <Link
-              to="/Contact"
-              className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
-              onClick={() => setShowMenu(false)}
-            >
-              CONTACT
-            </Link>
+            {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
+              <Link
+                key={item}
+                to={`/${item === "HOME" ? "" : item}`}
+                className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 transition"
+                onClick={() => setShowMenu(false)}
+              >
+                {item}
+              </Link>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Search Panel */}
+      {/* 🔍 Search Bar */}
       {showSearch && (
         <div className="absolute right-6 top-16 bg-white border border-gray-300 rounded-xl shadow-md p-4 w-64 z-20">
           <div className="flex items-center gap-2">
@@ -195,7 +168,7 @@ const Navbar = ({ userdata, onLogout }) => {
         </div>
       )}
 
-      {/* Profile Dropdown */}
+      {/* 👤 Profile Dropdown */}
       {showDropdown && (
         <div className="absolute right-6 top-16 bg-white border border-gray-300 rounded-xl shadow-md p-3 w-40 z-20">
           <div

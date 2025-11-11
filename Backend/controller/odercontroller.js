@@ -29,3 +29,15 @@ export const placeOrder = async (req, res) => {
     res.status(500).json({ message: "Failed to place order" });
   }
 };
+
+
+export const getorder = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const orders = await Order.find({ userId });
+    res.status(200).json(orders);
+  } catch (error) {
+    console.log("Get Order Error", error);
+    res.status(500).json({ message: "Failed to get order" });
+  }
+};
