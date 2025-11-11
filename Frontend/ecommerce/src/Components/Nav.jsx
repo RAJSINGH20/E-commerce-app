@@ -121,8 +121,8 @@ const Navbar = ({ userdata, onLogout }) => {
           
 
           {/* Cart */}
-          <div className="relative cursor-pointer hover:text-gray-900">
-            <FaShoppingCart onClick={()=>{navigate("/cart")}} />
+          <div className="relative cursor-pointer hover:text-gray-900" onClick={()=>{navigate("/cart")}}>
+            <FaShoppingCart  />
             <div className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1">
               {getcartCount()}
             </div>

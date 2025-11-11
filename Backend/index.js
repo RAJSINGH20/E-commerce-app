@@ -7,6 +7,7 @@ import cors from "cors";
 import userroutes from "./routes/userroutes.js";
 import productroutes from "./routes/productroutes.js";
 import cartroute from "./routes/cartRoute.js";
+import OrderRoutes from "./routes/OrderRoutes.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/auth", authroutes);
 app.use("/api/user", userroutes);
 app.use("/api/cart", cartroute);
 app.use("/api/product", productroutes);
+app.use("/api/order", OrderRoutes);
 console.log("Product routes loaded");
 
 
