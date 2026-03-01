@@ -15,7 +15,7 @@ let port = process.env.PORT || 3000;
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: ['https://e-commerce-app-my4s.vercel.app/', 'http://localhost:5174'],
   credentials: true,
 }));
 
