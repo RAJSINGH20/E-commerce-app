@@ -6,7 +6,7 @@ export const AuthDataContext = React.createContext();
 
 function AuthProvider({ children }) {
 
-    let serverURL = "https://e-commerce-app-xi-kohl.vercel.app/";
+    let serverURL = "https://e-commerce-app-mu-lemon.vercel.app/";
 
     let value = {serverURL};
   return (
