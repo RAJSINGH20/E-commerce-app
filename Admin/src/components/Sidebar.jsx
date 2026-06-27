@@ -23,7 +23,7 @@ const Sidebar = () => {
           <li
             className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-200 cursor-pointer transition"
             onClick={() => {
-              navigate("/Add");
+              navigate("/");
               setIsOpen(false);
             }}
           >
