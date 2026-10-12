@@ -4,13 +4,10 @@ import BestSeller from '../Components/BestSeller'
 
 const Product = () => {
   return (
-    <div className="mt-0 bg-gray-50">
-      {/* Latest Collection Section */}
+    <main>
       <LatestCollection />
-
-      {/* Bestseller Section */}
       <BestSeller />
-    </div>
+    </main>
   )
 }
 

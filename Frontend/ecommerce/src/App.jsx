@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import "./App.css";
 
 import Nav from "./Components/Nav.jsx";
 import Registration from "./pages/Registration.jsx";
@@ -21,7 +22,7 @@ const App = () => {
     location.pathname === "/login" || location.pathname === "/Registration";
 
   return (
-    <>
+    <div className="storefront">
       {/* ✅ Navbar visible on all pages except login/register */}
       {!hideNav && <Nav />}
 
@@ -38,7 +39,7 @@ const App = () => {
         <Route path="/PlaceOrder" element={<PlaceOrder />} />
         <Route path="/Order" element={<Orders />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Title from "./Tittle";
-import { ShopDataContext } from "../context/ShopContanier";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 import Card from "./Card";
 
 const Bestseller = () => {
@@ -14,18 +14,15 @@ const Bestseller = () => {
   }, [products]);
 
   return (
-    <section className="w-full bg-white py-14 px-5 sm:px-10 lg:px-20 xl:px-32">
-      <div className="max-w-7xl mx-auto text-center">
-        {/* 🏷️ Section Title */}
+    <section className="w-full border-y border-rule bg-white px-4 py-16 sm:px-8 lg:px-12 lg:py-20">
+      <div className="mx-auto max-w-[1360px] text-center">
         <Title text1="Best" text2="Sellers" />
 
-        {/* 📝 Subtitle */}
-        <p className="text-gray-600 text-base sm:text-lg mt-3 mb-10 max-w-2xl mx-auto">
-          Discover our most popular products loved by customers worldwide.
+        <p className="mx-auto mb-9 mt-3 max-w-xl text-sm leading-6 text-gray-600 sm:text-base">
+          The pieces customers come back for, selected for fit, feel, and everyday versatility.
         </p>
 
-        {/* 🛍️ Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 mt-6">
+        <div className="product-grid mt-6 grid grid-cols-2 gap-3 text-left sm:gap-5 lg:grid-cols-4 lg:gap-6">
           {bestseller.length > 0 ? (
             bestseller.map((item, index) => (
               <Card
@@ -37,7 +34,7 @@ const Bestseller = () => {
               />
             ))
           ) : (
-            <p className="col-span-full text-gray-500 text-center">
+            <p className="col-span-full py-12 text-center text-sm text-gray-500">
               No bestsellers available at the moment.
             </p>
           )}

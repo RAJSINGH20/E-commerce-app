@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Title from "./Tittle";
-import { ShopDataContext } from "../context/ShopContanier";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 import Card from "./Card";
 
 const LatestCollection = () => {
@@ -12,19 +12,15 @@ const LatestCollection = () => {
   }, [products]);
 
   return (
-    <div className="w-full bg-gray-50 py-10 px-5 sm:px-10 lg:px-20">
-      <div className="max-w-7xl mx-auto text-center">
-        {/* ✅ Title Component */}
+    <section className="w-full bg-paper px-4 py-16 sm:px-8 lg:px-12 lg:py-20">
+      <div className="mx-auto max-w-[1360px] text-center">
         <Title text1="Latest" text2="Collection" />
 
-        {/* ✅ Subtitle */}
-        <p className="text-gray-600 text-base sm:text-lg mt-3 mb-8">
-          Shop into our new seasonal collection — fresh styles, premium quality,
-          and exclusive trends.
+        <p className="mx-auto mb-9 mt-3 max-w-xl text-sm leading-6 text-gray-600 sm:text-base">
+          New pieces, considered details, and easy-to-wear favorites for the season ahead.
         </p>
 
-        {/* ✅ Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
+        <div className="product-grid mt-6 grid grid-cols-2 gap-3 text-left sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
           {latestproduct.map((item, index) => (
             <Card
               key={index}
@@ -36,7 +32,7 @@ const LatestCollection = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

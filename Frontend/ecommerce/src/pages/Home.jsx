@@ -16,44 +16,27 @@ const Home = () => {
 
   // ✅ Auto-slide every 3 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((prev) => (prev + 1) % herodata.length);
-    }, 3000);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const interval = setInterval(() => setCount((prev) => (prev + 1) % herodata.length), 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [herodata.length]);
 
   return (
     <>
-      {/* 🟣 HERO SECTION */}
-      <section className="relative w-full min-h-[80vh] flex flex-col md:flex-row items-center bg-gradient-to-r from-gray-900 to-white-900 text-white overflow-hidden">
-        
-        {/* Left Text Area */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center items-start px-8 sm:px-12 md:px-16 lg:px-20 py-12 space-y-5 z-10">
+      <section className="grid overflow-hidden bg-forest text-white md:min-h-[min(700px,calc(100svh-72px))] md:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative z-10 order-1 min-h-[390px] md:min-h-[620px]">
           <Hero
             herodata={herodata[count]}
-            herocount={count}
             setherocount={setCount}
           />
         </div>
-
-        {/* Right Background/Image */}
-        <div className="w-full md:w-1/2 h-[50vh] md:h-[80vh]">
+        <div className="relative order-2 h-[48vh] min-h-[320px] md:h-auto md:min-h-[620px]">
           <Background herocount={count} />
         </div>
       </section>
 
-      {/* 🟢 PRODUCT SECTION */}
-      <section className="w-full bg-gray-50 py-16 px-5 sm:px-10 lg:px-20">
-        <div className="max-w-7xl mx-auto">
-          <Product />
-        </div>
-      </section>
-
-
-      <footer>
-      <OurrPolicy/>
-      </footer>
-
+      <Product />
+      <OurrPolicy />
     </>
   );
 };

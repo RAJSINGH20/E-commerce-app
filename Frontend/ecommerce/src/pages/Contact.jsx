@@ -5,110 +5,103 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const Contact = () => {
   return (
-    <div className="bg-gray-50 py-16 px-5 sm:px-10 lg:px-20">
-      {/* 🏷️ Title */}
-      <div className="text-center mb-10">
+    <main className="min-h-screen bg-paper px-4 py-10 sm:px-7 sm:py-14 lg:px-10">
+      <header className="animate-enter mx-auto mb-9 max-w-[1200px] text-center">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-coral">OneCart / Support</p>
         <Title text1="CONTACT" text2="US" />
-      </div>
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-gray-600">Questions about a product or your order? We’re ready to help.</p>
+      </header>
 
-      {/* 🧭 Top Section: Image + Info */}
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8">
-        {/* Left: Image */}
-        <div className="w-full lg:w-1/2">
+      <div className="mx-auto grid max-w-[1200px] items-center gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="animate-enter overflow-hidden">
           <img
             src={contactImg}
             alt="Contact us"
-            className="w-full h-80 sm:h-96 object-cover rounded-lg shadow-md"
+            className="aspect-[5/4] w-full object-cover"
           />
         </div>
 
-        {/* Right: Info Text */}
-        <div className="w-full lg:w-1/2 text-gray-700">
-          <h3 className="text-2xl font-semibold mb-4">Get In Touch</h3>
-          <p className="leading-relaxed mb-4">
+        <div className="animate-enter-late text-gray-700">
+          <h2 className="mb-4 font-display text-2xl font-semibold text-ink">Get in touch</h2>
+          <p className="mb-6 text-sm leading-7">
             Have a question, feedback, or need help with your order? We re here to assist you.
             Reach out to our support team anytime, and we ll get back to you as soon as possible.
           </p>
 
-          <ul className="space-y-3">
-            <li className="flex items-center gap-3">
-              <FaPhoneAlt className="text-blue-600" /> 
+          <ul className="divide-y divide-rule border-y border-rule">
+            <li className="flex items-center gap-3 py-4 text-sm">
+              <FaPhoneAlt className="text-forest" aria-hidden="true" />
               <span>+91 98765 43210</span>
             </li>
-            <li className="flex items-center gap-3">
-              <FaEnvelope className="text-blue-600" /> 
+            <li className="flex items-center gap-3 py-4 text-sm">
+              <FaEnvelope className="text-forest" aria-hidden="true" />
               <span>support@yourshop.com</span>
             </li>
-            <li className="flex items-center gap-3">
-              <FaMapMarkerAlt className="text-blue-600" /> 
+            <li className="flex items-center gap-3 py-4 text-sm">
+              <FaMapMarkerAlt className="text-forest" aria-hidden="true" />
               <span>123, Market Street, Kolkata, India</span>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* 📬 Contact Form Section */}
-      <div className="max-w-3xl mx-auto mt-16 bg-white rounded-xl shadow-md p-8 border">
-        <h3 className="text-2xl font-semibold text-center mb-6">Send Us a Message</h3>
+      <section className="animate-enter mx-auto mt-16 max-w-3xl border-y border-rule bg-white px-5 py-8 sm:px-8">
+        <h2 className="font-display mb-6 text-center text-2xl font-semibold text-ink">Send a message</h2>
 
-        <form className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <form className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           <input
             type="text"
             placeholder="Your Name"
-            className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="min-h-12 border border-rule bg-paper px-4 text-sm outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10"
           />
           <input
             type="email"
             placeholder="Your Email"
-            className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="min-h-12 border border-rule bg-paper px-4 text-sm outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10"
           />
           <input
             type="text"
             placeholder="Subject"
-            className="border rounded-lg p-3 sm:col-span-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="min-h-12 border border-rule bg-paper px-4 text-sm outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10 sm:col-span-2"
           />
           <textarea
             placeholder="Your Message"
             rows="5"
-            className="border rounded-lg p-3 sm:col-span-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="min-h-32 border border-rule bg-paper px-4 py-3 text-sm outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10 sm:col-span-2"
           ></textarea>
 
           <button
             type="submit"
-            className="sm:col-span-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all duration-300"
+            className="min-h-12 bg-forest px-5 text-xs font-bold uppercase tracking-[0.1em] text-leaf transition hover:bg-ink sm:col-span-2"
           >
             Send Message
           </button>
         </form>
-      </div>
+      </section>
 
-      {/* 🌟 Bottom Info Cards */}
-      <div className="max-w-6xl mx-auto mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
-          <div className="text-3xl mb-3">📞</div>
-          <h4 className="font-semibold mb-2">Customer Support</h4>
-          <p className="text-gray-600 text-sm">
+      <div className="mx-auto mt-14 grid max-w-[1200px] grid-cols-1 border-y border-rule sm:grid-cols-3">
+        <div className="border-b border-rule py-6 sm:border-b-0 sm:border-r sm:pr-6">
+          <h3 className="font-display mb-2 font-semibold text-ink">Customer support</h3>
+          <p className="text-sm leading-6 text-gray-600">
             Our support team is available 24/7 to help you with queries.
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
-          <div className="text-3xl mb-3">🕒</div>
-          <h4 className="font-semibold mb-2">Working Hours</h4>
-          <p className="text-gray-600 text-sm">
+        <div className="border-b border-rule py-6 sm:border-b-0 sm:px-6">
+          <h3 className="font-display mb-2 font-semibold text-ink">Working hours</h3>
+          <p className="text-sm leading-6 text-gray-600">
             Monday to Saturday — 9:00 AM to 8:00 PM
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm border text-center">
-          <div className="text-3xl mb-3">📍</div>
-          <h4 className="font-semibold mb-2">Our Office</h4>
-          <p className="text-gray-600 text-sm">
+        <div className="py-6 sm:border-l sm:border-rule sm:pl-6">
+          <h3 className="font-display mb-2 font-semibold text-ink">Our office</h3>
+          <p className="text-sm leading-6 text-gray-600">
             Visit us anytime at our main branch in Kolkata.
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

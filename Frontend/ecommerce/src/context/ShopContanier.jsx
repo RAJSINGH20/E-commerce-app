@@ -1,10 +1,9 @@
 // ShopContainer.jsx
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { AuthDataContext } from "./Authcontext.jsx";
-import { userdataContext } from "./Usercontext.jsx";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { AuthDataContext } from "./AuthDataContext.jsx";
+import { userdataContext } from "./UserDataContext.jsx";
+import { ShopDataContext } from "./ShopDataContext.jsx";
 import axios from "axios";
-
-export const ShopDataContext = createContext();
 
 const ShopContainer = ({ children }) => {
   const [products, setProducts] = useState([]);
@@ -16,7 +15,7 @@ const ShopContainer = ({ children }) => {
   const deliveryfees = 50;
 
   // ✅ Fetch all products
-  const getProductsData = async () => {
+  const getProductsData = useCallback(async () => {
     try {
       const result = await axios.get(`${serverURL}/api/product/GetProducts`, {
         withCredentials: true,
@@ -25,7 +24,7 @@ const ShopContainer = ({ children }) => {
     } catch (error) {
       console.error("Error fetching products data:", error);
     }
-  };
+  }, [serverURL]);
 
   // ✅ Add item to cart
   const addtocart = async (itemId, size) => {
@@ -60,7 +59,7 @@ const ShopContainer = ({ children }) => {
   };
 
   // ✅ Get user cart from backend
-  const getUserCart = async () => {
+  const getUserCart = useCallback(async () => {
     try {
       console.log("Fetching user cart...");
       const result = await axios.post(serverURL+"/api/cart/get",{},{ withCredentials: true }
@@ -69,7 +68,7 @@ const ShopContainer = ({ children }) => {
     } catch (error) {
       console.log("Error loading user cart:", error.message);
     }
-  };
+  }, [serverURL]);
 
   // ✅ Update quantity of item
   const updatequantity = async (itemId, size, quantity) => {
@@ -116,11 +115,11 @@ const ShopContainer = ({ children }) => {
   // ✅ useEffects
   useEffect(() => {
     getProductsData();
-  }, []);
+  }, [getProductsData]);
 
   useEffect(() => {
     getUserCart();
-  }, []);
+  }, [getUserCart]);
 
   const value = {
     products,

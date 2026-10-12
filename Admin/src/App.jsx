@@ -1,18 +1,16 @@
 import React from 'react'
-import Home from './pages/Home'
+import './App.css'
 import Add from './pages/Add.jsx'
-import Orders from './pages/Orders'
 import Login from './pages/Login.jsx'
 import List from './pages/List'
 import { Routes, Route } from 'react-router-dom'
 
 const App = () => {
     return (
-        <div>
+        <div className="admin-app">
         
             <Routes>
                 <Route path="/" element={<Add />} />
-                <Route path="/orders" element={<Orders />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/list" element={<List />} />
             </Routes>

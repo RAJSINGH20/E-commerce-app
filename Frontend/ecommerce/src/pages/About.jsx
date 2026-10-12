@@ -1,69 +1,67 @@
 import React from 'react'
 import image from '../assets/phto shopping.jpeg'
 import Title from '../Components/Tittle'
+import { FaHeadset, FaStar, FaTruck } from 'react-icons/fa'
 
 const About = () => {
   return (
-    <div className="bg-gray-50 py-16 px-5 sm:px-10 lg:px-20">
-      {/* Title */}
-      <div className="text-center mb-10">
+    <main className="min-h-screen bg-paper px-4 py-10 sm:px-7 sm:py-14 lg:px-10">
+      <div className="animate-enter mx-auto max-w-[1200px]">
+        <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-coral">OneCart / Our story</p>
         <Title text1="ABOUT" text2="US" />
       </div>
 
-      {/* Main content: left image, right paragraph */}
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-8">
-        {/* Left: image */}
-        <div className="w-full lg:w-1/2">
+      <div className="mx-auto grid max-w-[1200px] items-center gap-8 lg:grid-cols-2 lg:gap-14">
+        <div className="animate-enter overflow-hidden">
           <img
             src={image}
-            alt="About us"
-            className="w-full h-80 sm:h-96 object-cover rounded-lg shadow-md"
+            alt="OneCart team curating clothing and accessories"
+            className="aspect-[5/4] w-full object-cover"
           />
         </div>
 
-        {/* Right: about text */}
-        <div className="w-full lg:w-1/2">
-          <h3 className="text-2xl font-semibold mb-4">Who We Are</h3>
-          <p className="text-gray-700 leading-relaxed mb-4">
+        <div className="animate-enter-late py-4 lg:py-8">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.16em] text-forest">Thoughtfully chosen</p>
+          <h2 className="font-display mb-5 text-3xl font-semibold text-ink sm:text-4xl">Good design belongs in the everyday.</h2>
+          <p className="mb-4 text-sm leading-7 text-gray-700">
             We are an e-commerce team dedicated to delivering high quality products with an emphasis
             on customer satisfaction. Our catalog is curated to provide great value and reliable
             service. We combine modern design, careful selection, and fast delivery to give you a
             seamless shopping experience.
           </p>
-          <p className="text-gray-700 leading-relaxed">
+          <p className="text-sm leading-7 text-gray-700">
             Our mission is to make shopping simple and trustworthy. From sourcing to shipping, we
             prioritize transparency and support so you can shop with confidence.
           </p>
         </div>
       </div>
 
-      {/* Bottom: Why choose us boxes */}
-      <div className="max-w-6xl mx-auto mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border">
-          <div className="text-3xl mb-3">🚚</div>
-          <h4 className="font-semibold mb-2">Fast Delivery</h4>
-          <p className="text-gray-600 text-sm">
+      <div className="mx-auto mt-14 grid max-w-[1200px] grid-cols-1 border-y border-rule sm:grid-cols-3">
+        <div className="border-b border-rule py-6 sm:border-b-0 sm:border-r sm:pr-6">
+          <FaTruck className="mb-4 text-xl text-forest" aria-hidden="true" />
+          <h3 className="mb-2 font-display font-semibold text-ink">Fast delivery</h3>
+          <p className="text-sm leading-6 text-gray-600">
             Reliable and quick shipping so your orders arrive on time.
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm border">
-          <div className="text-3xl mb-3">⭐</div>
-          <h4 className="font-semibold mb-2">Quality Products</h4>
-          <p className="text-gray-600 text-sm">
+        <div className="border-b border-rule py-6 sm:border-b-0 sm:px-6 sm:first:border-0">
+          <FaStar className="mb-4 text-xl text-coral" aria-hidden="true" />
+          <h3 className="mb-2 font-display font-semibold text-ink">Quality pieces</h3>
+          <p className="text-sm leading-6 text-gray-600">
             We handpick products to ensure excellent quality and long-lasting value.
           </p>
         </div>
 
-        <div className="bg-white rounded-lg p-6 shadow-sm border">
-          <div className="text-3xl mb-3">💬</div>
-          <h4 className="font-semibold mb-2">24/7 Support</h4>
-          <p className="text-gray-600 text-sm">
+        <div className="py-6 sm:border-l sm:border-rule sm:pl-6">
+          <FaHeadset className="mb-4 text-xl text-forest" aria-hidden="true" />
+          <h3 className="mb-2 font-display font-semibold text-ink">Here to help</h3>
+          <p className="text-sm leading-6 text-gray-600">
             Friendly customer support available around the clock to help with any issue.
           </p>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 

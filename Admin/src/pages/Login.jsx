@@ -3,7 +3,7 @@ import vcart_logo from "../assets/vcart_logo.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-import { AuthDataContext } from "../Context/AuthCountext";
+import { AuthDataContext } from "../Context/AuthDataContext.jsx";
 
 const Login = () => {
   // ✅ States
@@ -44,98 +44,93 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-blue-500 to-indigo-200 p-6">
-      <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md relative border border-gray-100">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-6">
-          <img
-            src={vcart_logo}
-            alt="Logo"
-            className="w-16 h-16 mb-3 cursor-pointer hover:scale-105 transition-transform"
-            onClick={() => navigate("/")}
-          />
-          <h1 className="text-3xl font-bold text-indigo-700 tracking-wide">
-            Login Account
-          </h1>
-          <p className="text-gray-500 mt-1 text-sm">
-            Join VCart and start your shopping journey today
-          </p>
-        </div>
-
-        {/* Login Form */}
-        <form className="flex flex-col gap-4" onSubmit={adminlogin}>
+    <main className="grid min-h-screen bg-paper lg:grid-cols-[1.02fr_0.98fr]">
+      <section className="ops-panel relative flex min-h-[250px] flex-col overflow-hidden bg-forest px-7 py-8 text-white sm:px-12 sm:py-10 lg:min-h-screen lg:px-[8vw] lg:py-14">
+        <div className="relative z-10 flex items-center gap-3">
+          <img src={vcart_logo} alt="VCart" className="h-11 w-11 rounded-xl object-cover" />
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 rounded-lg p-2.5 outline-none transition duration-200"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <p className="font-display text-lg font-semibold leading-none">VCart</p>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.17em] text-leaf">Admin operations</p>
           </div>
-
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              className="w-full border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 rounded-lg p-2.5 outline-none transition duration-200 pr-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            {showPassword ? (
-              <FaEyeSlash
-                className="absolute right-3 top-9 text-gray-400 cursor-pointer hover:text-gray-600 transition"
-                onClick={() => setShowPassword(!showPassword)}
-              />
-            ) : (
-              <FaEye
-                className="absolute right-3 top-9 text-gray-400 cursor-pointer hover:text-gray-600 transition"
-                onClick={() => setShowPassword(!showPassword)}
-              />
-            )}
-          </div>
-
-          {/* ✅ Login Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`bg-indigo-600 text-white font-semibold rounded-lg py-2.5 mt-3 transition duration-300 shadow-md ${
-              loading
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:bg-indigo-700 hover:shadow-lg"
-            }`}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        {/* Divider */}
-        <div className="flex items-center my-5">
-          <hr className="flex-grow border-gray-300" />
-          <span className="mx-2 text-gray-500 text-sm">or</span>
-          <hr className="flex-grow border-gray-300" />
         </div>
+        <div className="relative z-10 mt-auto max-w-lg pt-10 lg:pb-[7vh]">
+          <p className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-leaf">
+            <span className="h-px w-7 bg-leaf" /> Store workspace
+          </p>
+          <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-normal sm:text-5xl">Good work starts with a clear view.</h1>
+          <p className="mt-5 max-w-md text-sm leading-6 text-white/65">Manage products and keep your catalog moving from one focused workspace.</p>
+          <div className="mt-10 flex items-center gap-3 text-xs font-semibold text-white/70">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 text-leaf">01</span>
+            <span>Catalog management</span>
+            <span className="h-px w-8 bg-white/20" />
+            <span className="h-2 w-2 rounded-full bg-leaf shadow-[0_0_0_5px_rgba(211,243,107,0.12)]" />
+          </div>
+        </div>
+        <p className="relative z-10 mt-8 text-[10px] font-bold uppercase tracking-[0.16em] text-white/40 lg:mt-0">V-CART / COMMERCE OPERATIONS</p>
+      </section>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Add a new account?{" "}
-          <button
-            onClick={() => navigate("/Registration")}
-            className="text-indigo-600 hover:underline font-medium"
-          >
-            Register here
-          </button>
-        </p>
-      </div>
-    </div>
+      <section className="flex min-h-[520px] items-center justify-center px-5 py-12 sm:px-10 lg:min-h-screen lg:px-14">
+        <div className="animate-reveal w-full max-w-md">
+          <div className="mb-9">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-coral">Welcome back</p>
+            <h2 className="font-display text-3xl font-semibold text-ink sm:text-4xl">Sign in to your workspace</h2>
+            <p className="mt-3 text-sm leading-6 text-ink/55">Use your administrator credentials to continue.</p>
+          </div>
+
+          <form className="flex flex-col gap-5" onSubmit={adminlogin}>
+            <label className="flex flex-col gap-2 text-sm font-semibold text-ink">
+              Email address
+              <input
+                type="email"
+                placeholder="admin@example.com"
+                autoComplete="username"
+                className="min-h-12 w-full rounded-lg border border-rule bg-white px-4 text-sm font-normal text-ink placeholder:text-ink/35 transition focus:border-forest focus:ring-4 focus:ring-forest/10"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-2 text-sm font-semibold text-ink">
+              Password
+              <span className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  className="min-h-12 w-full rounded-lg border border-rule bg-white px-4 pr-12 text-sm font-normal text-ink placeholder:text-ink/35 transition focus:border-forest focus:ring-4 focus:ring-forest/10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-ink/45 transition hover:text-forest"
+                >
+                  {showPassword ? <FaEyeSlash aria-hidden="true" /> : <FaEye aria-hidden="true" />}
+                </button>
+              </span>
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-forest px-5 text-sm font-bold text-leaf shadow-[0_10px_22px_rgba(36,73,54,0.15)] transition duration-200 hover:-translate-y-0.5 hover:bg-ink disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "Signing in..." : "Sign in"}
+              {!loading && <span aria-hidden="true">→</span>}
+            </button>
+          </form>
+
+          <div className="mt-8 flex items-center gap-3 border-t border-rule pt-5">
+            <span className="h-2 w-2 rounded-full bg-[#8dbd37]" />
+            <p className="text-xs text-ink/50">Private workspace · Authorized administrators only</p>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 };
 

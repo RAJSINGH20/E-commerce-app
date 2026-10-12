@@ -1,14 +1,13 @@
 import React from 'react'
-import dotenv from 'dotenv';
-
-
-export const AuthDataContext = React.createContext();
+import { AuthDataContext } from './AuthDataContext.jsx';
 
 function AuthProvider({ children }) {
 
-    let serverURL = "https://e-commerce-app-mu-lemon.vercel.app/";
+    const serverURL = import.meta.env.DEV
+      ? "http://localhost:8000"
+      : "https://e-commerce-app-mu-lemon.vercel.app";
 
-    let value = {serverURL};
+    const value = {serverURL};
   return (
     <AuthDataContext.Provider value={value}>
       {children}

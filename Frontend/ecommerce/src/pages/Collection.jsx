@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import Title from "../Components/Tittle";
-import { ShopDataContext } from "../context/ShopContanier";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 import Card from "../Components/Card.jsx";
 
 const Collection = () => {
@@ -36,55 +36,44 @@ const Collection = () => {
   }, [search, category, sort, products]);
 
   return (
-    <section className="w-full min-h-screen bg-gray-50 py-12 px-5 sm:px-10 lg:px-20">
+    <section className="min-h-screen bg-paper px-4 py-10 sm:px-7 sm:py-14 lg:px-10">
       <div className="max-w-7xl mx-auto">
         {/* 🏷️ Title */}
         <div className="text-center mb-10">
           <Title text1="Our" text2="Collection" />
           <p className="text-gray-600 text-base sm:text-lg mt-3">
-            Explore our exclusive collection of fashion, lifestyle, and more —
-            curated just for you.
+            Find easy favorites and considered details, curated for everyday wear.
           </p>
         </div>
 
         {/* 🧭 Filter Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-2xl shadow-sm mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-3 border-y border-rule bg-white/75 py-4 sm:grid-cols-[minmax(220px,1fr)_auto_auto] sm:items-center">
           <input
             type="text"
-            placeholder="Search for products..."
+            placeholder="Search the collection"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full sm:w-1/3 border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-gray-400 outline-none"
+            aria-label="Search products"
+            className="min-h-11 w-full border border-rule bg-paper px-4 text-sm text-ink placeholder:text-gray-400 outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10"
           />
 
-          <div className="flex gap-4 flex-wrap justify-center">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="border border-gray-300 rounded-xl px-4 py-2 bg-white focus:ring-2 focus:ring-gray-400 outline-none"
-            >
+          <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Filter by category" className="min-h-11 border border-rule bg-white px-4 text-sm text-ink outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10">
               <option value="all">All Categories</option>
               <option value="men">Men</option>
               <option value="women">Women</option>
               <option value="kids">Kids</option>
               <option value="accessories">Accessories</option>
-            </select>
+          </select>
 
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="border border-gray-300 rounded-xl px-4 py-2 bg-white focus:ring-2 focus:ring-gray-400 outline-none"
-            >
+          <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort products" className="min-h-11 border border-rule bg-white px-4 text-sm text-ink outline-none transition focus:border-forest focus:ring-4 focus:ring-forest/10">
               <option value="default">Sort By</option>
               <option value="lowToHigh">Price: Low to High</option>
               <option value="highToLow">Price: High to Low</option>
-            </select>
-          </div>
+          </select>
         </div>
 
-        {/* 🛍️ Product Grid */}
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="product-grid grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {filtered.map((item, i) => (
               <Card
                 key={i}
@@ -96,9 +85,10 @@ const Collection = () => {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 mt-10">
-            No products match your filters.
-          </p>
+          <div className="py-20 text-center">
+            <p className="font-display text-xl font-semibold text-ink">No pieces found</p>
+            <p className="mt-2 text-sm text-gray-500">Try another search or category.</p>
+          </div>
         )}
       </div>
     </section>

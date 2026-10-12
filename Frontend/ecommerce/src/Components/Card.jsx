@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ShopDataContext } from "../context/ShopContanier";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 function Card({ name, image, id, price }) {
@@ -7,33 +7,29 @@ function Card({ name, image, id, price }) {
   const navigate = useNavigate(); // ✅ correct hook usage
 
   return (
-    <div
+    <article
       key={id}
-      className="bg-white rounded-2xl shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden group"
+      className="product-card group cursor-pointer overflow-hidden border border-rule bg-white transition duration-300 hover:-translate-y-1 hover:border-forest/30 hover:shadow-[0_18px_38px_rgba(23,37,29,0.12)]"
       onClick={() => navigate(`/ProductDetails/${id}`)} // ✅ proper navigation
     >
-      {/* 🖼️ Product Image */}
-      <div className="relative w-full h-56 sm:h-64 md:h-72 lg:h-80 xl:h-[22rem] bg-gray-100 flex items-center justify-center">
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-gray-100">
         <img
           src={image}
           alt={name}
-          className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
         />
-
-        {/* 🔘 Subtle Overlay on Hover */}
-        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <span className="absolute bottom-3 right-3 translate-y-2 bg-paper px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-ink opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">View item</span>
       </div>
 
-      {/* 🛍️ Product Info */}
-      <div className="p-4 sm:p-5 lg:p-6 text-center space-y-2">
-        <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-800 truncate">
+      <div className="space-y-1.5 p-3.5 sm:p-4">
+        <h3 className="truncate text-sm font-semibold text-ink sm:text-base">
           {name}
         </h3>
-        <p className="text-gray-600 text-sm sm:text-base lg:text-lg">
+        <p className="text-sm font-medium text-forest">
           {currency} {price}
         </p>
       </div>
-    </div>
+    </article>
   );
 }
 

@@ -1,18 +1,17 @@
 
-import React, { createContext, useEffect, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { AuthDataContext } from "./Authcontext.jsx";
-
-export const userdataContext = createContext();
+import { AuthDataContext } from "./AuthDataContext.jsx";
+import { userdataContext as UserDataContext } from "./UserDataContext.jsx";
 
 const Usercontext = ({ children }) => {
-  let [userData, setUserData] = useState(null);
-  const serverURL = useContext(AuthDataContext)
+  const [userData, setUserData] = useState(null);
+  const { serverURL } = useContext(AuthDataContext);
 
-  const getcurrentuser = async () => {
+  const getcurrentuser = useCallback(async () => {
     try {
       console.log("Fetching current user..........");
-      const result =await axios.get(serverURL + "/api/user/getcurrentUser", { withCredentials: true })
+      const result = await axios.post(`${serverURL}/api/user/getcurrentUser`, {}, { withCredentials: true });
 
       setUserData(result.data);
       console.log("User fetched:", result.status);
@@ -21,17 +20,17 @@ const Usercontext = ({ children }) => {
       setUserData(null);
       // setUserData(null);
     }
-  };
+  }, [serverURL]);
 
   useEffect(() => {
     getcurrentuser();
-  }, []);
+  }, [getcurrentuser]);
 
   const value = { userData, setUserData, getcurrentuser };
   return (
-    <userdataContext.Provider value={value}>
+    <UserDataContext.Provider value={value}>
       {children}
-    </userdataContext.Provider>
+    </UserDataContext.Provider>
   );
 };
 

@@ -1,13 +1,15 @@
-import React from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import vcart_logo from '../assets/vcart_logo.png';
 import axios from 'axios';
+import { FiLogOut } from 'react-icons/fi';
+import { AuthDataContext } from '../Context/AuthDataContext.jsx';
 
 const Nav = () => {
   const navigate = useNavigate();
+  const { serverURL } = useContext(AuthDataContext);
 
   const logoutHandler = async () => {
-    const serverURL = "http://localhost:8000";
     try {
       const response = await axios.post(
         `${serverURL}/api/auth/logout`,
@@ -24,24 +26,32 @@ const Nav = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full h-16 bg-gray-900 text-white flex items-center justify-between px-6 shadow-lg z-50">
-      {/* Left section: Logo and title */}
+    <nav className="fixed inset-x-0 top-0 z-50 flex h-[72px] items-center justify-between border-b border-rule bg-paper/95 px-4 backdrop-blur-xl sm:px-7 lg:px-9">
       <div
-        className="flex items-center cursor-pointer"
+        className="flex cursor-pointer items-center gap-3"
         onClick={() => navigate("/")}
       >
-        <img src={vcart_logo} alt="Logo" className="w-8 h-8 mr-2" />
-        <h1 className="text-xl font-semibold">Admin Panel</h1>
+        <img src={vcart_logo} alt="VCart" className="h-10 w-10 rounded-xl object-cover" />
+        <div>
+          <h1 className="font-display text-lg font-semibold leading-none tracking-normal text-ink">VCart</h1>
+          <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-forest/65">Operations</p>
+        </div>
       </div>
 
-      {/* Right section: Logout button */}
+      <div className="flex items-center gap-3 sm:gap-5">
+        <div className="hidden items-center gap-2 border-r border-rule pr-5 sm:flex">
+          <span className="h-2 w-2 rounded-full bg-[#8dbd37] shadow-[0_0_0_4px_rgba(141,189,55,0.14)]" />
+          <span className="text-xs font-semibold text-forest">Store is live</span>
+        </div>
       <button
         type="button"
         onClick={logoutHandler}
-        className="bg-red-600 hover:bg-red-700 transition px-4 py-2 rounded-md text-sm font-medium"
+        className="group inline-flex min-h-10 items-center gap-2 rounded-full border border-rule bg-white px-3.5 text-sm font-semibold text-ink shadow-sm transition hover:border-coral/40 hover:bg-[#fff7f4] hover:text-[#b94e37] sm:px-4"
       >
-        Logout
+        <FiLogOut className="transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+        <span>Log out</span>
       </button>
+      </div>
     </nav>
   );
 };

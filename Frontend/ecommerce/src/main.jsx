@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
-import { AuthDataContext } from './context/Authcontext.jsx'
+import { AuthDataContext } from './context/AuthDataContext.jsx'
 import Usercontext from './context/Usercontext.jsx'
 import ShopContanier from './context/ShopContanier.jsx'
 

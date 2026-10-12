@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaSearch,
   FaUserCircle,
@@ -9,10 +9,11 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { BsFillBagCheckFill } from "react-icons/bs";
-import { AuthDataContext } from "../context/Authcontext.jsx";
-import { ShopDataContext } from "../context/ShopContanier.jsx";
+import vcart_logo from "../assets/vcart_logo.png";
+import { AuthDataContext } from "../context/AuthDataContext.jsx";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 
-const Navbar = ({ userdata, onLogout }) => {
+const Navbar = ({ onLogout }) => {
   const [showSearch, setShowSearch] = React.useState(false);
   const [showDropdown, setShowDropdown] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
@@ -21,6 +22,13 @@ const Navbar = ({ userdata, onLogout }) => {
   const { serverURL } = React.useContext(AuthDataContext);
   const { getcartCount } = React.useContext(ShopDataContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const navItems = [
+    { label: "Home", path: "/" },
+    { label: "Collections", path: "/COLLECTIONS" },
+    { label: "About", path: "/About" },
+    { label: "Contact", path: "/Contact" },
+  ];
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -60,128 +68,70 @@ const Navbar = ({ userdata, onLogout }) => {
   };
 
   return (
-    <div className="relative">
-      {/* Navbar */}
-      <div className="flex items-center justify-between px-6 py-3 bg-[#e7f1ef] shadow-md transition-all duration-300">
-        {/* Left - Logo */}
-        <div
-          className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-transform duration-300"
-          onClick={() => navigate("/")}
-        >
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/891/891462.png"
-            alt="logo"
-            className="w-6 h-6 animate-pulse"
-          />
-          <div className="text-xl font-semibold text-gray-700">OneCart</div>
-        </div>
+    <header className="sticky top-0 z-50 border-b border-rule bg-paper/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-7 lg:px-10">
+        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="OneCart home">
+          <img src={vcart_logo} alt="" className="h-10 w-10 rounded-xl object-cover" />
+          <span className="font-display text-lg font-semibold text-ink">OneCart<span className="ml-1 text-coral">.</span></span>
+        </Link>
 
-        {/* Middle - Links */}
-        <div className="hidden md:flex gap-4">
-          {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
-            <Link
-              key={item}
-              to={`/${item === "HOME" ? "" : item}`}
-              className="bg-gray-800 text-white px-4 py-1 rounded-full text-sm hover:bg-gray-900 transition-all duration-300 hover:scale-105"
-            >
-              {item}
-            </Link>
-          ))}
-        </div>
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+          {navItems.map(({ label, path }) => {
+            const active = location.pathname.toLowerCase() === path.toLowerCase();
+            return (
+              <Link key={path} to={path} className={`relative px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] transition ${active ? "text-forest" : "text-ink/55 hover:text-ink"}`}>
+                {label}
+                {active && <span className="absolute inset-x-3 bottom-0 h-0.5 bg-coral" />}
+              </Link>
+            );
+          })}
+        </nav>
 
-        {/* Right Icons */}
-        <div className="flex items-center gap-4 text-gray-700 text-xl relative">
-          <div
-            className="cursor-pointer hover:text-gray-900 transition-all duration-300 hover:scale-110"
-            onClick={toggleSearch}
-          >
-            <FaSearch />
-          </div>
-
-          <div
-            className="cursor-pointer hover:text-gray-900 transition-all duration-300 hover:scale-110"
-            onClick={toggleDropdown}
-          >
-            <FaUserCircle />
-          </div>
-
-          <div
-            className="cursor-pointer hover:text-gray-900 transition-all duration-300 hover:scale-110"
-            onClick={() => navigate("/Order")}
-          >
-            <BsFillBagCheckFill />
-          </div>
-
-          <div
-            className="relative cursor-pointer hover:text-gray-900 transition-all duration-300 hover:scale-110"
-            onClick={() => navigate("/cart")}
-          >
-            <FaShoppingCart />
-            <div className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full px-1 animate-bounce">
-              {getcartCount()}
-            </div>
-          </div>
-
-          <div
-            className="md:hidden cursor-pointer hover:text-gray-900 transition-all duration-300 hover:scale-110"
-            onClick={toggleMenu}
-          >
-            {showMenu ? <FaTimes /> : <FaBars />}
-          </div>
+        <div className="relative flex shrink-0 items-center gap-1 text-ink">
+          <button type="button" aria-label="Search products" title="Search products" onClick={toggleSearch} className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white hover:text-forest">
+            <FaSearch className="text-sm" aria-hidden="true" />
+          </button>
+          <button type="button" aria-label="Account menu" title="Account" onClick={toggleDropdown} className="hidden h-10 w-10 items-center justify-center rounded-full transition hover:bg-white hover:text-forest sm:flex">
+            <FaUserCircle className="text-lg" aria-hidden="true" />
+          </button>
+          <button type="button" aria-label="Your orders" title="Your orders" onClick={() => navigate("/Order")} className="hidden h-10 w-10 items-center justify-center rounded-full transition hover:bg-white hover:text-forest sm:flex">
+            <BsFillBagCheckFill className="text-base" aria-hidden="true" />
+          </button>
+          <button type="button" aria-label="Shopping cart" title="Shopping cart" onClick={() => navigate("/cart")} className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white hover:text-forest">
+            <FaShoppingCart className="text-base" aria-hidden="true" />
+            <span className="absolute right-0.5 top-0.5 flex min-h-4 min-w-4 items-center justify-center rounded-full bg-leaf px-1 text-[9px] font-bold text-ink">{getcartCount()}</span>
+          </button>
+          <button type="button" aria-label={showMenu ? "Close navigation" : "Open navigation"} aria-expanded={showMenu} onClick={toggleMenu} className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white hover:text-forest md:hidden">
+            {showMenu ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
+          </button>
         </div>
       </div>
 
-      {/* 📱 Mobile Menu */}
       {showMenu && (
-        <div className="md:hidden bg-white shadow-md border-t border-gray-200 absolute top-14 left-0 w-full z-10 animate-slideDown">
-          <div className="flex flex-col gap-3 p-4">
-            {["HOME", "COLLECTIONS", "ABOUT", "CONTACT"].map((item) => (
-              <Link
-                key={item}
-                to={`/${item === "HOME" ? "" : item}`}
-                className="bg-gray-800 text-white px-4 py-2 rounded-full text-center text-sm hover:bg-gray-900 hover:scale-105 transition-all duration-300"
-                onClick={() => setShowMenu(false)}
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
-        </div>
+        <nav className="animate-slideDown border-t border-rule bg-paper px-4 py-3 md:hidden" aria-label="Mobile navigation">
+          {navItems.map(({ label, path }) => (
+            <Link key={path} to={path} className="block border-b border-rule/70 py-3 text-xs font-bold uppercase tracking-[0.14em] text-ink/70 last:border-0" onClick={() => setShowMenu(false)}>{label}</Link>
+          ))}
+          <button type="button" onClick={() => { navigate("/Order"); setShowMenu(false); }} className="block w-full border-b border-rule/70 py-3 text-left text-xs font-bold uppercase tracking-[0.14em] text-ink/70">Your orders</button>
+          <button type="button" onClick={() => { toggleDropdown(); setShowMenu(false); }} className="block w-full py-3 text-left text-xs font-bold uppercase tracking-[0.14em] text-ink/70">Account</button>
+        </nav>
       )}
 
-      {/* 🔍 Search Bar */}
       {showSearch && (
-        <div className="absolute right-6 top-16 bg-white border border-gray-300 rounded-xl shadow-md p-4 w-64 z-20 animate-fadeIn">
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search products..."
-              className="flex-1 outline-none px-2 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 transition-all duration-300"
-            />
-            <div
-              className="bg-gray-800 text-white px-3 py-1 rounded-lg text-sm cursor-pointer hover:bg-gray-900 hover:scale-105 transition-all duration-300"
-              onClick={() => alert(`Searching for: ${searchValue}`)}
-            >
-              Go
-            </div>
-          </div>
+        <div className="animate-fadeIn absolute right-4 top-[calc(100%+10px)] z-50 w-[min(92vw,380px)] border border-rule bg-white p-3 shadow-[0_18px_50px_rgba(23,37,29,0.14)] sm:right-8">
+          <form className="flex items-center gap-2" onSubmit={(event) => { event.preventDefault(); alert(`Searching for: ${searchValue}`); }}>
+            <input type="search" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} placeholder="Search products..." className="min-h-11 min-w-0 flex-1 border border-rule bg-paper px-3 text-sm outline-none focus:border-forest" />
+            <button type="submit" className="min-h-11 bg-forest px-4 text-xs font-bold uppercase tracking-[0.1em] text-leaf transition hover:bg-ink">Search</button>
+          </form>
         </div>
       )}
 
-      {/* 👤 Profile Dropdown */}
       {showDropdown && (
-        <div className="absolute right-6 top-16 bg-white border border-gray-300 rounded-xl shadow-md p-3 w-40 z-20 animate-fadeIn">
-          <div
-            className="text-gray-800 text-sm py-2 px-3 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-            onClick={logout}
-          >
-            Logout
-          </div>
+        <div className="animate-fadeIn absolute right-16 top-[calc(100%+8px)] z-50 min-w-40 border border-rule bg-white p-2 shadow-[0_18px_50px_rgba(23,37,29,0.14)]">
+          <button type="button" className="w-full px-3 py-2.5 text-left text-sm font-semibold text-ink/70 transition hover:bg-paper hover:text-ink" onClick={logout}>Log out</button>
         </div>
       )}
-    </div>
+    </header>
   );
 };
 

@@ -9,12 +9,18 @@ const images = [img1, img2, img3, img4];
 
 const Background = ({ herocount }) => {
   return (
-    <div className="absolute right-0 top-0 w-1/2 h-full flex items-center justify-center p-4">
+    <div className="relative h-full min-h-[320px] w-full overflow-hidden bg-forest">
       <img
+        key={herocount}
         src={images[herocount]}
-        alt="Hero Background"
-        className="w-[80%] h-[80%] object-cover rounded-2xl shadow-xl transition-all duration-700 ease-in-out"
+        alt="Featured seasonal fashion"
+        className="hero-image absolute inset-0 h-full w-full object-cover object-center"
       />
+      <div className="absolute inset-0 bg-gradient-to-r from-forest/35 via-transparent to-ink/10" />
+      <div className="absolute bottom-5 left-5 flex items-center gap-3 border-l-2 border-leaf pl-3 text-white sm:bottom-8 sm:left-8">
+        <span className="text-[10px] font-bold uppercase tracking-[0.16em]">Curated for now</span>
+        <span className="text-[10px] text-white/70">0{herocount + 1} / 04</span>
+      </div>
     </div>
   );
 };

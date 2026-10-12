@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { AuthDataContext } from "../context/Authcontext.jsx";
+import { AuthDataContext } from "../context/AuthDataContext.jsx";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -26,78 +26,71 @@ const Orders = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-[80vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-yellow-500"></div>
+      <div className="flex min-h-[70vh] items-center justify-center bg-paper">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-rule border-t-forest" role="status" aria-label="Loading orders" />
       </div>
     );
 
   if (orders.length === 0)
     return (
-      <div className="flex flex-col justify-center items-center h-[80vh]">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
-          alt="No orders"
-          className="w-32 mb-4 opacity-70"
-        />
-        <p className="text-lg text-gray-500">You have no orders yet.</p>
+      <div className="flex min-h-[70vh] flex-col items-center justify-center bg-paper px-5 text-center">
+        <span className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-leaf/55 text-2xl text-forest">○</span>
+        <h1 className="font-display text-2xl font-semibold text-ink">No orders yet</h1>
+        <p className="mt-2 text-sm text-gray-500">Your order history will appear here after checkout.</p>
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-10 px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
-        My Orders
-      </h2>
+    <main className="min-h-screen bg-paper px-4 py-8 sm:px-7 sm:py-12 lg:px-10">
+      <header className="animate-enter mx-auto mb-8 max-w-[1180px] border-b border-rule pb-6">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-coral">OneCart / Account</p>
+        <h1 className="font-display text-3xl font-semibold text-ink sm:text-4xl">Your orders</h1>
+        <p className="mt-2 text-sm text-gray-500">A record of the pieces on their way to you.</p>
+      </header>
 
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="mx-auto max-w-[1180px] divide-y divide-rule border-y border-rule bg-white">
         {orders.map((order) => (
           <div
             key={order._id}
-            className="border border-gray-200 rounded-2xl p-6 shadow-sm bg-white hover:shadow-lg transition-shadow duration-300"
+            className="animate-enter px-4 py-5 sm:px-6 sm:py-7"
           >
-            {/* Header */}
-            <div className="flex justify-between items-center mb-5">
-              <div>
-                <p className="text-sm text-gray-500">
-                  <span className="font-semibold">Order ID:</span> {order._id}
-                </p>
-                <p className="text-sm text-gray-500">
-                  <span className="font-semibold">Date:</span>{" "}
-                  {new Date(order.date).toLocaleString("en-IN")}
-                </p>
+            <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-500">Order reference</p>
+                <p className="mt-1 break-all text-sm font-semibold text-ink">{order._id}</p>
+                <p className="mt-1 text-xs text-gray-500">{new Date(order.date).toLocaleString("en-IN")}</p>
               </div>
               <span
-                className={`text-xs font-medium px-3 py-1 rounded-full ${
+                className={`w-fit px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] ${
                   order.status === "Delivered"
-                    ? "bg-green-100 text-green-700"
+                    ? "bg-leaf/55 text-forest"
                     : order.status === "Cancelled"
-                    ? "bg-red-100 text-red-700"
-                    : "bg-yellow-100 text-yellow-700"
+                    ? "bg-[#fff0eb] text-[#a84832]"
+                    : "bg-gray-100 text-gray-700"
                 }`}
               >
                 {order.status || "Pending"}
               </span>
             </div>
 
-            {/* Summary */}
-            <div className="border-t border-gray-100 pt-4">
-              <p className="text-gray-700 mb-2">
-                <strong>Total Amount:</strong>{" "}
-                <span className="text-gray-900 font-semibold">
-                  ₹{order.amount}
-                </span>
+            <div className="grid gap-4 border-y border-rule py-4 sm:grid-cols-2">
+              <p className="text-sm text-gray-600">
+                <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-gray-500">Order total</span>
+                <span className="mt-1 inline-block font-display text-lg font-semibold text-ink">₹{order.amount}</span>
               </p>
-              <p className="text-gray-700 mb-6">
-                <strong>Shipping Address:</strong> {order.address}
+              <p className="break-words text-sm text-gray-600">
+                <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-gray-500">Delivery address</span>
+                <span className="mt-1 inline-block leading-6">{typeof order.address === "string" ? order.address : JSON.stringify(order.address)}</span>
               </p>
+            </div>
 
-              {/* Items */}
-              <h4 className="font-semibold text-gray-800 mb-3">Items:</h4>
-              <ul className="grid md:grid-cols-2 gap-4">
+              <div className="pt-5">
+              <h2 className="mb-3 text-[10px] font-bold uppercase tracking-[0.14em] text-forest">Items in this order</h2>
+              <ul className="divide-y divide-rule border-y border-rule">
                 {order.items.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-100 hover:bg-gray-100 transition"
+                    className="flex items-center gap-3 py-3 sm:gap-4"
                   >
                     <img
                       src={
@@ -105,32 +98,22 @@ const Orders = () => {
                         "https://cdn-icons-png.flaticon.com/512/679/679922.png"
                       }
                       alt={item.name}
-                      className="w-20 h-20 object-cover rounded-md border"
+                      className="h-16 w-16 shrink-0 bg-gray-100 object-cover sm:h-20 sm:w-20"
                     />
-                    <div className="flex-1">
-                      <p className="text-gray-800 font-medium">{item.name}</p>
-                      <p className="text-sm text-gray-500">
-                        Qty: {item.quantity}
-                      </p>
-                      <p className="text-gray-700 font-semibold mt-1">
-                        ₹{item.price * item.quantity}
-                      </p>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-ink">{item.name}</p>
+                      <p className="mt-1 text-xs text-gray-500">Qty: {item.quantity}</p>
                     </div>
+                    <p className="shrink-0 text-sm font-semibold text-ink">₹{item.price * item.quantity}</p>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Footer */}
-            <div className="mt-6 flex justify-end">
-              <button className="px-5 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-colors text-sm font-medium">
-                View Details
-              </button>
-            </div>
           </div>
         ))}
       </div>
-    </div>
+    </main>
   );
 };
 

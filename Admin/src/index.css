@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+@theme {
+	--font-sans: "DM Sans", sans-serif;
+	--font-display: "Space Grotesk", sans-serif;
+	--color-paper: #f3f5f0;
+	--color-ink: #17251d;
+	--color-forest: #244936;
+	--color-leaf: #d3f36b;
+	--color-coral: #e97156;
+	--color-rule: #dce3da;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	min-width: 320px;
+	background: #f3f5f0;
+}
+
+body {
+	min-width: 320px;
+	min-height: 100vh;
+	margin: 0;
+	color: #17251d;
+	font-family: "DM Sans", sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: 3px solid #9bc63a;
+	outline-offset: 3px;
+}
+
+::selection {
+	color: #17251d;
+	background: #d3f36b;
+}

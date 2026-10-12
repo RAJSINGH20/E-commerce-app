@@ -1,6 +1,4 @@
-import React, { createContext } from "react";
-
-export const AuthDataContext = createContext();
+import { AuthDataContext } from "./AuthDataContext.jsx";
 
 const AuthDataContextProvider = ({ children }) => {
   const serverURL = "https://e-commerce-app-mu-lemon.vercel.app/"; // your backend URL
