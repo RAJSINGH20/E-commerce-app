@@ -8,7 +8,7 @@ import {
   registration,
 } from "../controller/authcoontroller.js"; // ✅ fixed spelling (was 'authcoontroller')
 import { getcurrentUser } from "../controller/usercontroller.js";
-import IsAuthMiddleware from "../middleware/IsAuthMiddleware.js"; // ✅ middleware import
+import IsAuthMiddleware from "../middleware/isauthmiddleware.js"; // ✅ middleware import
 
 const authRoutes = express.Router();
 
