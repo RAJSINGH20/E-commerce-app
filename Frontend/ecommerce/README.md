@@ -13,4 +13,6 @@ Set the Vercel project's **Root Directory** to `Frontend/ecommerce`, then config
 - `VITE_API_URL=https://e-commerce-app-mu-lemon.vercel.app`
 - `VITE_GOOGLE_CLIENT_ID`: your Google OAuth web client ID
 
-Redeploy after changing Vercel environment variables. On the backend's Vercel project, set `FRONTEND_URL` to the storefront's exact deployed origin (for example, `https://your-store.vercel.app`) and redeploy so the backend allows browser requests from that domain. The browser console's `content.js` CSP warning is from a browser extension and is unrelated to the app's API connection.
+Deploy the backend as a separate Vercel project with its **Root Directory** set to `Backend`. Configure its required environment variables, including `MONGODB_URI`, `JWT_SECRET`, and the Cloudinary credentials used for product uploads. Set `FRONTEND_URL` to the storefront's exact deployed origin (for example, `https://your-store.vercel.app`) so the backend allows browser requests from that domain.
+
+Redeploy each Vercel project after changing its environment variables. The backend root URL returns an API health response; API routes require a working MongoDB connection. The browser console's `content.js` CSP warning is from a browser extension and is unrelated to the app's API connection.

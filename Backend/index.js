@@ -11,8 +11,6 @@ import OrderRoutes from "./routes/OrderRoutes.js";
 
 dotenv.config();
 
-let port = process.env.PORT || 8000;
-
 const app = express();
 const allowedOrigins = [
   process.env.FRONTEND_URL,
@@ -31,17 +29,39 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.get("/", (_req, res) => {
+  res.json({ success: true, message: "E-commerce API is running" });
+});
+
+app.use("/api", async (_req, _res, next) => {
+  try {
+    await connectdb();
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use("/api/auth", authroutes);
 app.use("/api/user", userroutes);
 app.use("/api/cart", cartroute);
 app.use("/api/product", productroutes);
 app.use("/api/order", OrderRoutes);
-console.log("Product routes loaded");
 
-
-console.log("enter index.js");
-
-app.listen(port, () => {
-  connectdb();
-  console.log(`Server is running on http://localhost:${port}`);
+app.use((error, _req, res, _next) => {
+  console.error("API request failed:", error);
+  res.status(503).json({
+    success: false,
+    message: "The API is temporarily unavailable",
+  });
 });
+
+export default app;
+
+if (!process.env.VERCEL) {
+  const port = process.env.PORT || 8000;
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
