@@ -1,16 +1,16 @@
-# React + Vite
+# E-commerce storefront
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Run locally
 
-Currently, two official plugins are available:
+1. Configure the backend environment variables, including `MONGODB_URI` and `JWT_SECRET`. Start it from `Backend` with `npm install` and `npm run dev`. It listens on `http://localhost:8000` by default.
+2. In `Frontend/ecommerce`, copy `.env.example` to `.env`, set `VITE_GOOGLE_CLIENT_ID`, then run `npm install` and `npm run dev`.
+3. Open the local URL printed by Vite. The storefront uses `http://localhost:8000` as its API in development by default.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Deploy the storefront to Vercel
 
-## React Compiler
+Set the Vercel project's **Root Directory** to `Frontend/ecommerce`, then configure these environment variables in the Vercel project settings:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `VITE_API_URL=https://e-commerce-app-mu-lemon.vercel.app`
+- `VITE_GOOGLE_CLIENT_ID`: your Google OAuth web client ID
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Redeploy after changing Vercel environment variables. On the backend's Vercel project, set `FRONTEND_URL` to the storefront's exact deployed origin (for example, `https://your-store.vercel.app`) and redeploy so the backend allows browser requests from that domain. The browser console's `content.js` CSP warning is from a browser extension and is unrelated to the app's API connection.

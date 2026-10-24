@@ -11,11 +11,21 @@ import OrderRoutes from "./routes/OrderRoutes.js";
 
 dotenv.config();
 
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 8000;
 
 const app = express();
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://e-commerce-app-my4s.vercel.app',
+  'https://e-commerce-app-qxne.vercel.app',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
+  'http://localhost:5173',
+].filter(Boolean);
+
 app.use(cors({
-  origin: ['https://e-commerce-app-my4s.vercel.app', 'https://e-commerce-app-qxne.vercel.app', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:5173'],
+  origin: allowedOrigins,
   credentials: true,
 }));
 
