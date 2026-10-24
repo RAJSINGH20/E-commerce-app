@@ -1,47 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthDataContext } from "../context/AuthDataContext.jsx";
+import { ShopDataContext } from "../context/ShopDataContext.jsx";
 
 const Checkout = () => {
-  const [cart, setCart] = useState([]);
-  const [subtotal, setSubtotal] = useState(0);
-  const deliveryFee = 50;
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { serverURL } = useContext(AuthDataContext) || { serverURL: "http://localhost:8000" };
+  const { serverURL } = useContext(AuthDataContext);
+  const {
+    products,
+    cartitem,
+    setcartitem,
+    deliveryfees,
+    productsLoading,
+    productsError,
+    cartLoading,
+    cartError,
+  } = useContext(ShopDataContext);
 
-  // ✅ Fetch cart data from backend or localStorage
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.post(
-          `${serverURL}/api/cart/get`,
-          {},
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-          }
-        );
-        setCart(res.data.items || []);
-        setSubtotal(res.data.totalAmount || 0);
-      } catch (error) {
-        console.log("Cart Fetch Error:", error);
-      }
-    };
+  const cart = useMemo(
+    () => Object.entries(cartitem).flatMap(([productId, sizes]) => {
+      const product = products.find((item) => item._id === productId);
+      if (!product) return [];
 
-    fetchCart();
-  }, [serverURL]);
+      return Object.entries(sizes)
+        .filter(([, quantity]) => quantity > 0)
+        .map(([size, quantity]) => ({ ...product, size, quantity }));
+    }),
+    [cartitem, products]
+  );
+  const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalAmount = subtotal + deliveryfees;
+  const isCartLoading = cartLoading || productsLoading;
+  const loadError = cartError || productsError;
 
-  const totalAmount = subtotal + deliveryFee;
-
-  // ✅ Place order API call
   const handlePlaceOrder = async () => {
     if (!address.trim()) {
       setMessage("Please enter delivery address");
+      return;
+    }
+
+    if (!cart.length) {
+      setMessage("Your cart is empty.");
       return;
     }
 
@@ -49,8 +52,6 @@ const Checkout = () => {
     setMessage("");
 
     try {
-      const token = localStorage.getItem("token");
-
       const res = await axios.post(
         `${serverURL}/api/order/placeOrder`,
         {
@@ -59,19 +60,14 @@ const Checkout = () => {
           address,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { "Content-Type": "application/json" },
           withCredentials: true,
         }
       );
 
       setMessage(res.data.message || "Order placed successfully!");
-      setCart([]);
+      setcartitem({});
       setAddress("");
-
-      // Optional redirect after 2s
       setTimeout(() => navigate("/Order"), 2000);
     } catch (error) {
       console.error("Order Error:", error);
@@ -117,14 +113,18 @@ const Checkout = () => {
             <h2 className="mb-5 mt-1 font-display text-xl font-semibold text-ink">Order summary</h2>
 
             <div className="max-h-64 divide-y divide-rule overflow-y-auto border-y border-rule">
-              {cart.length > 0 ? (
-                cart.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between gap-4 py-3">
+              {isCartLoading ? (
+                <p className="py-5 text-sm text-gray-500">Loading your cart...</p>
+              ) : loadError ? (
+                <p role="alert" className="py-5 text-sm text-[#a84832]">{loadError}</p>
+              ) : cart.length > 0 ? (
+                cart.map((item) => (
+                  <div key={`${item._id}-${item.size}`} className="flex items-center justify-between gap-4 py-3">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-ink">{item.name}</p>
-                      <p className="mt-1 text-xs text-gray-500">Qty: {item.qty}</p>
+                      <p className="mt-1 text-xs text-gray-500">Size: {item.size} · Qty: {item.quantity}</p>
                     </div>
-                    <p className="shrink-0 text-sm font-semibold text-ink">₹{item.price * item.qty}</p>
+                    <p className="shrink-0 text-sm font-semibold text-ink">₹{item.price * item.quantity}</p>
                   </div>
                 ))
               ) : (
@@ -134,14 +134,14 @@ const Checkout = () => {
 
             <div className="space-y-3 border-b border-rule py-5 text-sm">
               <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>₹{subtotal}</span></div>
-              <div className="flex justify-between text-gray-600"><span>Delivery fee</span><span>₹{deliveryFee}</span></div>
+              <div className="flex justify-between text-gray-600"><span>Delivery fee</span><span>₹{deliveryfees}</span></div>
             </div>
             <div className="flex justify-between py-5 font-display text-base font-semibold text-ink"><span>Total</span><span>₹{totalAmount}</span></div>
 
             <button
               type="button"
               onClick={handlePlaceOrder}
-              disabled={loading || cart.length === 0}
+              disabled={loading || isCartLoading || Boolean(loadError) || cart.length === 0}
               className="min-h-12 w-full bg-forest px-4 text-xs font-bold uppercase tracking-[0.1em] text-leaf transition hover:bg-ink disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
             >
               {loading ? "Placing order..." : "Place order"}

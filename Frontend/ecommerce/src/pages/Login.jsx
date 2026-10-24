@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import vcart_logo from "../assets/vcart_logo.png";
-import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { AuthDataContext } from "../context/AuthDataContext.jsx";
 import { userdataContext } from "../context/UserDataContext.jsx";
+import GoogleAuthButton from "../Components/GoogleAuthButton.jsx";
 
 const Login = () => {
   // States
@@ -107,9 +107,10 @@ const Login = () => {
             <span className="h-px flex-1 bg-rule" />
           </div>
 
-          <button type="button" className="flex min-h-12 w-full items-center justify-center gap-3 border border-rule bg-white text-sm font-semibold text-ink transition hover:border-forest/40 hover:bg-gray-50">
-            <img src={google} alt="" className="h-4 w-4" /> Continue with Google
-          </button>
+          <GoogleAuthButton onAuthenticated={async () => {
+            await getcurrentuser();
+            navigate("/");
+          }} />
 
           <p className="mt-7 text-center text-sm text-gray-600">
             New to OneCart?{" "}

@@ -2,6 +2,7 @@ import express from "express";
 import upload from "../middleware/multer.js";
 import {
   adminlogin,
+  googleLogin,
   login,
   logout,
   registration,
@@ -14,6 +15,7 @@ const authRoutes = express.Router();
 // ✅ Public Routes
 authRoutes.post("/register", upload.single("profileImage"), registration);
 authRoutes.post("/login", login);
+authRoutes.post("/google", googleLogin);
 authRoutes.post("/adminlogin", adminlogin);
 authRoutes.post("/logout", logout);
 

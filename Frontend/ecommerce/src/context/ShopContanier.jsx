@@ -8,6 +8,10 @@ import axios from "axios";
 const ShopContainer = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [cartitem, setcartitem] = useState({});
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [productsError, setProductsError] = useState("");
+  const [cartLoading, setCartLoading] = useState(false);
+  const [cartError, setCartError] = useState("");
   const { serverURL } = useContext(AuthDataContext);
   const { userData } = useContext(userdataContext);
 
@@ -21,8 +25,12 @@ const ShopContainer = ({ children }) => {
         withCredentials: true,
       });
       setProducts(result.data);
+      setProductsError("");
     } catch (error) {
       console.error("Error fetching products data:", error);
+      setProductsError("Unable to load products. Please refresh and try again.");
+    } finally {
+      setProductsLoading(false);
     }
   }, [serverURL]);
 
@@ -62,11 +70,16 @@ const ShopContainer = ({ children }) => {
   const getUserCart = useCallback(async () => {
     try {
       console.log("Fetching user cart...");
+      setCartLoading(true);
+      setCartError("");
       const result = await axios.post(serverURL+"/api/cart/get",{},{ withCredentials: true }
       );
       setcartitem(result.data);
     } catch (error) {
-      console.log("Error loading user cart:", error.message);
+      console.error("Error loading user cart:", error);
+      setCartError("Unable to load your cart. Please refresh and try again.");
+    } finally {
+      setCartLoading(false);
     }
   }, [serverURL]);
 
@@ -118,14 +131,24 @@ const ShopContainer = ({ children }) => {
   }, [getProductsData]);
 
   useEffect(() => {
-    getUserCart();
-  }, [getUserCart]);
+    if (userData) {
+      getUserCart();
+      return;
+    }
+
+    setCartLoading(false);
+    setCartError("");
+  }, [getUserCart, userData]);
 
   const value = {
     products,
+    productsLoading,
+    productsError,
     currency,
     deliveryfees,
     cartitem,
+    cartLoading,
+    cartError,
     addtocart,
     setcartitem,
     updatequantity,

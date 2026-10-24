@@ -1,6 +1,15 @@
 import validator from 'validator';
 import User from '../model/usermodel.js';
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'node:crypto';
+import { OAuth2Client } from 'google-auth-library';
+
+const googleClient = new OAuth2Client();
+const authCookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+});
 import genToken, { genToken1 } from '../config/token.js';
 
 export const registration = async (req, res) => {
@@ -42,12 +51,9 @@ export const registration = async (req, res) => {
     // Generate token
     const token = await genToken(newuser._id);
 
-    // ✅ FIXED: Correct option name is `maxAge` (lowercase)
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      ...authCookieOptions(),
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     console.log("User registered successfully:", newuser);
@@ -92,11 +98,8 @@ export const login = async (req, res) => {
 
     const token = await genToken(user._id);
 
-    // ✅ FIXED: Correct option name is `maxAge` (lowercase)
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      ...authCookieOptions(),
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -120,9 +123,64 @@ export const login = async (req, res) => {
   }
 };
 
+export const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+
+    if (!clientId) {
+      console.error("Google sign-in failed: GOOGLE_CLIENT_ID is not configured");
+      return res.status(500).json({ message: "Google sign-in is not configured" });
+    }
+
+    if (typeof credential !== "string" || !credential) {
+      return res.status(400).json({ message: "Google credential is required" });
+    }
+
+    let payload;
+    try {
+      const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: clientId });
+      payload = ticket.getPayload();
+    } catch (error) {
+      console.error("Google ID token verification failed:", error.message);
+      return res.status(401).json({ message: "Google sign-in failed. Please try again." });
+    }
+
+    if (!payload?.email || !payload.email_verified) {
+      return res.status(401).json({ message: "Google account email is not verified" });
+    }
+
+    let user = await User.findOne({ email: payload.email });
+    if (!user) {
+      const password = await bcrypt.hash(randomBytes(32).toString("hex"), 10);
+      user = await User.create({
+        name: payload.name || payload.email,
+        email: payload.email,
+        password,
+      });
+    }
+
+    const token = await genToken(user._id);
+    res.cookie("token", token, {
+      ...authCookieOptions(),
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      message: "Google sign-in successful",
+    });
+  } catch (error) {
+    console.error("Google sign-in failed:", error.message);
+    return res.status(500).json({ message: "Google sign-in failed. Please try again." });
+  }
+};
+
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", authCookieOptions());
     console.log("User logged out successfully");
     return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
@@ -152,9 +210,7 @@ export const adminlogin = async (req, res) => {
     const token = await genToken1(email);
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "Strict",
+      ...authCookieOptions(),
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     console.log("Admin logged in successfully");

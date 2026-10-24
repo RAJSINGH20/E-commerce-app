@@ -1,11 +1,11 @@
 import React from "react";
 import vcart_logo from "../assets/vcart_logo.png";
-import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthDataContext } from "../context/AuthDataContext.jsx";
 import axios from "axios";
-// import { userdataContext } from "../context/Usercontext.jsx";
+import { userdataContext } from "../context/UserDataContext.jsx";
+import GoogleAuthButton from "../Components/GoogleAuthButton.jsx";
 
 
 const Registration = () => {
@@ -17,7 +17,7 @@ const Registration = () => {
     const [name, setname] = React.useState("");
     const [email, setemail] = React.useState("");
     const [password, setpassword] = React.useState("");
-    // const { getcurrentUser } = React.useContext(userdataContext);
+    const { getcurrentuser } = React.useContext(userdataContext);
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -92,9 +92,10 @@ const Registration = () => {
                         <span className="h-px flex-1 bg-rule" />
                     </div>
 
-                    <button type="button" className="flex min-h-12 w-full items-center justify-center gap-3 border border-rule bg-white text-sm font-semibold text-ink transition hover:border-forest/40 hover:bg-gray-50">
-                        <img src={google} alt="" className="h-4 w-4" /> Continue with Google
-                    </button>
+                    <GoogleAuthButton onAuthenticated={async () => {
+                        await getcurrentuser();
+                        navigate("/");
+                    }} />
 
                     <p className="mt-7 text-center text-sm text-gray-600">
                         Already have an account?{" "}
